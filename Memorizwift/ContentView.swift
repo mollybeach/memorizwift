@@ -10,9 +10,8 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         HStack {
-            ForEach(0..<2) { _ in
-                CardView()
-                CardView(isFaceUp: false)
+            ForEach(0..<4) { index in
+                CardView(initiallyFaceUp: index % 2 == 0)
             }
         }
         .foregroundColor(.purple)
@@ -21,18 +20,27 @@ struct ContentView: View {
     }
 }
 
-struct CardView: View{
-    var isFaceUp: Bool = true
+struct CardView: View {
+    @State private var isFaceUp: Bool
+
+    init(initiallyFaceUp: Bool) {
+        _isFaceUp = State(initialValue: initiallyFaceUp)
+    }
+
     var body: some View {
         ZStack {
-            let base = RoundedRectangle(cornerRadius:12)
-            if(isFaceUp) {
+            let base = RoundedRectangle(cornerRadius: 12)
+            if isFaceUp {
                 base.fill(.white)
                 base.strokeBorder(lineWidth: 5)
                 Text("👻").font(.largeTitle)
             } else {
                 base.fill()
             }
+        }
+        .onTapGesture {
+            isFaceUp.toggle()
+            print("Card tapped, isFaceUp: \(isFaceUp)")
         }
     }
 }
@@ -42,5 +50,6 @@ struct ContentView_Previews: PreviewProvider {
             ContentView()
         }
 }
+
 
 
