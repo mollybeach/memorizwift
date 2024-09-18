@@ -9,16 +9,28 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack(){
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.orange)
-            Text("Hello")
+        HStack() {
+            ForEach(0..<4) { _ in
+                CardView()
+            }
         }
+
+        .foregroundColor(.purple)
+        .imageScale(.small)
         .padding()
     }
-    
-    
+}
+
+struct CardView: View{
+    var body: some View {
+        ZStack(){
+            RoundedRectangle(cornerRadius:12)
+                .foregroundColor(.white)
+            RoundedRectangle(cornerRadius: 12)
+                .strokeBorder(lineWidth: 5)
+            Text("👻").font(.largeTitle)
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
