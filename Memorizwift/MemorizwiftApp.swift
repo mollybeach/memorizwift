@@ -25,7 +25,7 @@ struct MemorizwiftApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(i: 0, s: "")
         }
         .modelContainer(sharedModelContainer)
     }
