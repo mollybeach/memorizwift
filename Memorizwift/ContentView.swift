@@ -15,7 +15,6 @@ struct ContentView: View {
                 CardView(isFaceUp: false)
             }
         }
-
         .foregroundColor(.purple)
         .imageScale(.small)
         .padding()
@@ -34,11 +33,7 @@ struct CardView: View{
                 Text("👻").font(.largeTitle)
             } else {
                 RoundedRectangle(cornerRadius:12)
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(lineWidth: 5)
-                Text("👻").font(.largeTitle)
             }
-            
         }
     }
 }
