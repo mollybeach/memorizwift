@@ -46,6 +46,7 @@
 		04226D2B2C99FD1200AFD5A3 /* MemorizwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MemorizwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		04226D2F2C99FD1200AFD5A3 /* MemorizwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizwiftUITests.swift; sourceTree = "<group>"; };
 		04226D312C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizwiftUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		044AF0002C9B7E6B00368543 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +81,7 @@
 				04226D242C99FD1200AFD5A3 /* MemorizwiftTests */,
 				04226D2E2C99FD1200AFD5A3 /* MemorizwiftUITests */,
 				04226D102C99FD1100AFD5A3 /* Products */,
+				044AF0002C9B7E6B00368543 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
