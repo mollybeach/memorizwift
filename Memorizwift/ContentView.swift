@@ -14,26 +14,11 @@ struct ContentView: View {
     var body: some View {
         VStack{
             cards
-            HStack {
-                cardAdder
-                Spacer()
-                cardRemover
-            }
-            .imageScale(.large)
-            .font(.largeTitle)
+            cardCountAdjusters
         }
         .padding()
     }
-    var cardRemover: some View {
-        Button(action: {
-            if cardCount > 1 {
-                cardCount-=1
-            }
-
-        }, label: {
-            Image(systemName: "rectangle.stack.badge.minus.fill")
-        })
-    }
+    
     var cards: some View {
         HStack {
             ForEach(0..<cardCount, id:\.self) { index in
@@ -42,15 +27,32 @@ struct ContentView: View {
         }
         .foregroundColor(.purple)
     }
-    var cardAdder: some View {
-        Button(action: {
-            if cardCount < emojis.count {
-                cardCount+=1
-            }
-        }, label: {
-            Image(systemName: "plus.rectangle.on.rectangle.fill")
-        })
+    
+    var cardCountAdjusters: some View {
+        HStack {
+            cardAdder
+            Spacer()
+            cardRemover
+        }
+        .imageScale(.large)
+        .font(.largeTitle)
     }
+    
+    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
+        Button(action: {
+            cardCount += offset
+        }, label: {
+            Image(systemName: symbol)
+        })
+
+    }
+    var cardAdder: some View {
+        cardCountAdjuster(by: +1, symbol: "plus.rectangle.on.rectangle.fill")
+    }
+    var cardRemover: some View {
+        cardCountAdjuster(by: -1, symbol: "rectangle.stack.badge.minus.fill")
+    }
+    
 }
 
 struct CardView: View {
