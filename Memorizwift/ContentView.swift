@@ -26,7 +26,7 @@ struct ContentView: View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]){
             ForEach(0..<cardCount, id:\.self) { index in
                 CardView(content: emojis[index])
-                    .aspectRatio(2/3, contentMode: .fit)
+                    .aspectRatio(5/6, contentMode: .fit)
             }
         }
         .foregroundColor(.purple)
@@ -49,6 +49,7 @@ struct ContentView: View {
             Image(systemName: symbol)
         })
         .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+        .foregroundColor(.gray)
 
     }
     var cardAdder: some View {
