@@ -31,7 +31,7 @@
 
 ## MVVM Diagram
 
-![MVVM Diagram](Memorizwift/Assets.xcassets/MVVM.png)
+![MVVM Diagram](Memorizwift/Assets.xcassets/Image.imageset/MVVM.png)
 
 - Struct
 - Class

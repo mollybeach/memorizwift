@@ -14,6 +14,10 @@ struct ContentView: View {
     var body: some View {
         VStack{
             ScrollView{
+                Image("Image")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
                 cards
             }
             Spacer()

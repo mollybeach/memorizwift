@@ -15,6 +15,7 @@
 		04226D262C99FD1200AFD5A3 /* MemorizwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D252C99FD1200AFD5A3 /* MemorizwiftTests.swift */; };
 		04226D302C99FD1200AFD5A3 /* MemorizwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D2F2C99FD1200AFD5A3 /* MemorizwiftUITests.swift */; };
 		04226D322C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D312C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift */; };
+		049411CD2C9F5C5E00AC4D9C /* LectureNotes.md in Resources */ = {isa = PBXBuildFile; fileRef = 049411CC2C9F5C5D00AC4D9C /* LectureNotes.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		04226D2F2C99FD1200AFD5A3 /* MemorizwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizwiftUITests.swift; sourceTree = "<group>"; };
 		04226D312C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizwiftUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		044AF0002C9B7E6B00368543 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		049411CC2C9F5C5D00AC4D9C /* LectureNotes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LectureNotes.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				04226D2E2C99FD1200AFD5A3 /* MemorizwiftUITests */,
 				04226D102C99FD1100AFD5A3 /* Products */,
 				044AF0002C9B7E6B00368543 /* README.md */,
+				049411CC2C9F5C5D00AC4D9C /* LectureNotes.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -236,6 +239,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049411CD2C9F5C5E00AC4D9C /* LectureNotes.md in Resources */,
 				04226D1C2C99FD1200AFD5A3 /* Preview Assets.xcassets in Resources */,
 				04226D192C99FD1200AFD5A3 /* Assets.xcassets in Resources */,
 			);
