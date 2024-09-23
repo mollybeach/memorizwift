@@ -283,3 +283,43 @@ Garbage collection is basically when you have a reference to a class that say yo
 So it's actually a language specific feature so like in Java there's something called the Java virtual machine that executes Java it's a feature of basically the compiler so The compiler for swift is called LLDB low-level shit LLDB but that's the thing that you can type commands in and get like specific output in the console of Xcode, but It's a specific feature it's not like I guess I mean it is a program but don't it's not like an app you know what I mean like it's it's the compiler like how V8 is that whatever the engine for JavaScript do you know what I mean for web stuff
 
 Swift uses a different method of memory management called ARC automatic reference counting basically if you have a pointer pointing to something then it will stay in memory and then when the pointers no longer pointing to it then everything is then it's it's killed the memory that hold it is killed And that's a very efficient form of memory
+
+
+# Lecture 4 
+//
+//  EmojiMemoryGame.swift
+//  Memorizwift
+//
+//  Created by Molly Beach on 9/21/24.
+//
+
+import SwiftUI // ViewModel Does Import Swift UI
+
+//class EmojiMemoryGame: MySuperClass, SomethingWeBehaveLike
+class EmojiMemoryGame {
+    // We never had any init intializer for our CardView. Classes did the same thing but
+    // their initializers have no arguments so they only work if all of your variables
+    // have no arguments it only works all your variables have default values and we have a
+    // variable right here model that has no value so that's why it's saying
+    // "i cant give you the free initializer here because you have some unitialized value
+    //since you have some unitialized variables so u have no intitalizers plesae "give me one" it's saying
+    // so i could give it an init and we're going to see init her ein a second here in our model but instead im going
+    // to try to give this
+    //private var model: MemoryGame<String> as value
+    //private var model: MemoryGame<String> = MemoryGame<String> () with no arguments possibly
+    // can i do that no because there's  a missing argument cards okay MemoryGame<String> is a struct
+    //it's free initalizer lets me initialize all of the variables and if i go back here and look at
+    // at my model it's going an unitialized variable which the cards the cards of array
+    // from MemoryGame.swift :   private(set) var cards : Array<Card> <-
+    // You've got to provide those cards:
+    //  private var model: MemoryGame<String>(cards:
+    private var model: MemoryGame<String>
+    
+    var cards: Array<MemoryGame<String>.Card>{
+        return model.cards
+    }
+    func choose(_ card: MemoryGame<String>.Card){
+        model.choose(card)
+    }
+}
+
