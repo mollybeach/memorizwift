@@ -286,17 +286,44 @@ Swift uses a different method of memory management called ARC automatic referenc
 
 
 # Lecture 4 
-//
-//  EmojiMemoryGame.swift
-//  Memorizwift
-//
-//  Created by Molly Beach on 9/21/24.
-//
+import Foundation
 
-import SwiftUI // ViewModel Does Import Swift UI
-
-//class EmojiMemoryGame: MySuperClass, SomethingWeBehaveLike
-class EmojiMemoryGame {
+// Model
+struct MemoryGame<CardContent> {
+    private(set) var cards : Array<Card>
+    
+    init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent){
+        // you job inside ur init is to initalize all ur vars
+        cards = [] // this is a literal array we did it with our emojis
+        // add numberOfPairsOfCards x 2 cards
+        // remove pairIndex replace with _ cuz we dont use pair index in the for loop
+        for pairIndex in 0 ..< max(2, numberOfPairsOfCards) {
+            let content = cardContentFactory(pairIndex)
+            // free initalizer cuz im a struct
+            cards.append(Card(content: content))
+            cards.append(Card(content: content))
+        }
+    }
+    
+    func choose(_ card: Card){
+        
+    }
+    //Cannot use mutating member on immutable value: 'self' is immutable
+    // Any function that modifies the model has to be marked mutating
+    mutating func shuffle(){
+        cards.shuffle()
+        print(cards)
+        
+    }
+    
+    struct Card {
+        var isFaceUp = true
+        var isMatched = false
+        let content: CardContent
+        
+    }
+    
+}
     // We never had any init intializer for our CardView. Classes did the same thing but
     // their initializers have no arguments so they only work if all of your variables
     // have no arguments it only works all your variables have default values and we have a
@@ -312,8 +339,76 @@ class EmojiMemoryGame {
     // at my model it's going an unitialized variable which the cards the cards of array
     // from MemoryGame.swift :   private(set) var cards : Array<Card> <-
     // You've got to provide those cards:
-    //  private var model: MemoryGame<String>(cards:
-    private var model: MemoryGame<String>
+    //  private var model: MemoryGame<String>(cards: <- this makes no sense for cards to be the argument
+    // so this is where intializers come in what does make sense is numberOfPairsOfCards: 4)
+    // ->   private var model: MemoryGame<String> = MemoryGame<String>(numberOfPairsOfCards: 4)
+    // we're going to have to create an init in MemoryGame.swift
+    
+    // closure
+    // if the last argument is to a function or a creation what can we do with it ? throw it on the outside closure syntax
+    // trailing closure take closure out of parenthessis
+    /*
+     for example :
+     performOperation(numbers: [1, 2, 3], operation: { (nums) in
+         print(nums)
+     })
+     to this :
+     performOperation(numbers: [1, 2, 3]) { (nums) in
+         print(nums)
+     }
+     explaination: { (nums) in print(nums) } is not longer surrounded by ()
+     
+     if i were to replace index with $0 $0 is a special name okay $0 means first argument i could have $1
+         let emojis =  ["👻", "🐮", "🍓", "🫐", "👀", "🐶", "🐱", "🦊", "🐻", "🦁", "🐸", "🐧", "🐢", "🐙", "🐝", "🐼", "🦄"]
+
+     you cant put variables before intializers in a class because you ont know whether emojis will be read yet to be able call it in the initializer 
+     
+     you could make it global but everyone in this class knows we dont use gloabl variables
+     
+     the solution is to add it back in to the class but add the word static to the front what it means is make emojis global
+     but namespace it inside of my class
+     
+     static let emojis =  ["👻", "🐮", "🍓", "🫐", "👀", "🐶", "🐱", "🦊", "🐻", "🦁", "🐸", "🐧", "🐢", "🐙", "🐝", "🐼", "🦄"]
+     to call this you say EmojiMemoryGame.emojis[pairIndex]
+     
+     and you can also add the word private now it's a private global variable only for us to use 
+     but another cool feature not really type inference but swift if youre doing a property intializer like these and you use one of these namespace globals you dont have to put the extra thing EmojiMemoryGame.emojis[pairIndex]
+     
+    it will figure it out you can just put emojis[pairIndex]
+    
+        // what if i want to make a lil function to create my model
+    private var model = createMemoryGame()
+    func createMemoryGame(){
+        
+        return MemoryGame(numberOfPairsOfCards: 4 ) { pairIndex in
+            return EmojiMemoryGame[pairIndex]
+        }
+    }
+ 
+    Cannot use instance member 'createMemoryGame' within property initializer; property initializers run before 'self' is available
+        cant use a function before i can intialize my class 
+        how do we fix that also with static
+            func createMemoryGame(){
+        
+        static return MemoryGame(numberOfPairsOfCards: 4 ) { pairIndex in
+            return EmojiMemoryGame[pairIndex]
+        }
+    }
+    
+    return types can never be infered in swift
+    
+        static let emojis =  ["👻", "🐮", "🍓", "🫐", "👀", "🐶", "🐱", "🦊", "🐻", "🦁", "🐸", "🐧", "🐢", "🐙", "🐝", "🐼", "🦄"]
+    
+    // what if i want to make a lil function to create my model
+   // i would like to put my statics at the top they're global to my entire thing so i want them to be listed first 
+    
+    private static func createMemoryGame() -> MemoryGame<String>{
+        return MemoryGame(numberOfPairsOfCards: 4 ) { pairIndex in
+            return  emojis[pairIndex]
+        }
+    }
+    
+    private var model = createMemoryGame()
     
     var cards: Array<MemoryGame<String>.Card>{
         return model.cards
@@ -322,4 +417,46 @@ class EmojiMemoryGame {
         model.choose(card)
     }
 }
+    When we say "some View" for the Var body it's not inferrring its actually looking in there and setting it to be that 
+             // .purple is actually Color.purple this is type color it's a truct and .purple is just a non private
+        // static var
+        // option click thats how u can see the documentation
+        .foregroundColor(Color.purple)
+        
+            //Cannot use mutating member on immutable value: 'self' is immutable
+    // Any function that modifies the model has to be marked mutating
+    mutating func shuffle(){
+        cards.shuffle()
+    }
+        // We have to get our view model reactive so that the cards shuffle so that something changes we do that by implementing
+// the protocol: Observable object
+class EmojiMemoryGame : ObservableObject {
+    static let emojis =  ["👻", "🐮", "🍓", "🫐", "👀", "🐶", "🐱", "🦊", "🐻", "🦁", "🐸", "🐧", "🐢", "🐙", "🐝", "🐼", "🦄"]
+        // if you put published @Published on a var that if this var changes it will say something changed
+    @Published private var model = createMemoryGame()
+    
+    
+    
+    // instead of the equal sign at the bottom in the preview pass the view model to content view 
+    struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView(viewModel: EmojiMemoryGame())
+    }
+}
+also change it in your app : //
+// so apps like views can have @StateObjects
+// somewhere there needs to be @State
+import SwiftUI
 
+@main
+struct MemorizwiftApp: App {
+    @StateObject var game = EmojiMemoryGame
+    var body: some Scene {
+        WindowGroup {
+            ContentView(viewModel: game)
+        }
+    }
+}
+
+
+     */

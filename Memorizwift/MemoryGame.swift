@@ -1,36 +1,39 @@
-//
-//  MemoryGame.swift
-//  Memorizwift
-//
-//  Created by Molly Beach on 9/21/24.
-//
-
 import Foundation
 
+//
+//  MemoryGame .swift
+//  Memorizwift
+//
+//  Created by Molly Beach on 9/17/24.
+//
+
 struct MemoryGame<CardContent> {
-    private(set) var cards : Array<Card>
+    private(set) var cards: [Card]
     
-    init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent){
-        // you job inside ur init is to initalize all ur vars
-        cards = [] // this is a literal array we did it with our emojis
-        // add numberOfPairsOfCards x 2 cards
-        // remove pairIndex replace with _ cuz we dont use pair index in the for loop
-        for pairIndex in 0..<numberOfPairsOfCards{
+    init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
+        cards = []
+        
+        for pairIndex in 0..<max(2, numberOfPairsOfCards) {
             let content = cardContentFactory(pairIndex)
-            // free initalizer cuz im a struct
             cards.append(Card(content: content))
             cards.append(Card(content: content))
         }
     }
     
-    func choose(_ card: Card){
-        
+    func choose(_ card: Card) {
+        // TODO: Implement card choosing logic
     }
+
+    mutating func shuffle() {
+        cards.shuffle()    }
+}
+
+// MARK: - MemoryGame.Card
+
+extension MemoryGame {
     struct Card {
-        var isFaceUp = false
+        var isFaceUp = true
         var isMatched = false
         let content: CardContent
-        
     }
-    
 }
