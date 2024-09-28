@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// MARK: - EmojiMemoryGame
-
 class EmojiMemoryGame: ObservableObject {
     
     // MARK: - Static Properties

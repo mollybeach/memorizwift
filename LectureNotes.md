@@ -459,4 +459,183 @@ struct MemorizwiftApp: App {
 }
 
 
+
      */
+
+
+# Lecture 5
+
+## enum
+
+- another variety of data structure in addition to struct and class 
+- it can only have discrete status 
+```
+enum FastFoodMenuItem {
+    case hamburger
+    case fries
+    case drink
+    case cookie
+}
+```
+- an enum is a value type (like struct), so its is copied and passed around
+
+### Associated Data
+- Each state can (but does not have to have it's own 'associated data')
+```
+enum FastFoodMenuItem {
+    case hamburger(numberOfPatties: Int)
+    case fries (size: FryOrderSize)
+    case drink (String, ounces: Int)
+    case cookie
+}
+```
+- Note that the drink case has 2 pieces of associated data (one of them "unnamed)
+- In the example above, FryOrderSize would also probably be an enum for example...
+```
+enum FryOrderSize {
+    case large
+    case small
+}
+```
+### Setting a value of enum 
+- Just use the name of the type along with the case you want seperated by a dot...
+```
+let menuItem: FastFooMenuItem = FastFoodMenuItem.hamburger(patties:2)
+var otherItem: FastFooMenuItem = FastFoodMenuItem.cookie
+var yetAnotherItem = .cookie // swift can't figure this out
+
+### Checking an enum's state
+An enum's state is usually checked with a switch statement ...
+(although we could use an if statement, but this is unusual if there is associated data)
+
+```
+var menuItem = FastFoodMenuItem.hamburger(patties: 2)
+
+switch menuItem {
+case FastFoodMenuItem.hamburger: print ("burger")
+case FastFoodMenuItem.fries: print("fries")
+case FastFoodMenuItem.drink: print ("drink")
+case FastFoodMenuItem.cookie: print ("cookie")
+}
+```
+Note that we are ignoring the "associated data" above ... so far ...
+
+It is not necessary to use the fully-expressed FastFoodMenuItem.fries inside the switch
+(since Swift can infer the FastFoodMenuItem part of that) 
+
+### break
+
+If you don't want to do something with a given case use break
+
+```
+var menuItem = FastFoodMenuItem.hamburger(patties: 2)
+
+switch menuItem {
+case .hamburger break
+case .fries: print("fries")
+case .drink: print ("drink")
+case .cookie: print ("cookie")
+}
+```
+This code would print nothing to the console
+
+### default
+A switch must handle all possible cases (although you can default uninteresting cases) ...
+
+```
+var menuItem = FastFoodMenuItem.cookie
+
+switch menuItem {
+case .hamburger: break 
+case .fries: print ("fries")
+default: print ("other")
+}
+
+If the menuItem was a cookie, the above item would print "other" on the console
+
+You can switch on any type (not just enum), by the way, for example ...
+```
+let s: String = "hello"
+
+switch {
+case "goodbye": ... 
+case "hello": ...
+default: ... // gotta have this for String because switch has to cover ALL cases
+｝
+```
+
+### Multiple lines allowed
+Each case in a switch can be multiple lines and does NOT fall through to the next case ...
+
+```
+var menuItem = FastFoodMenuItem.fries(size: FryOrderSize.large)
+
+switch menuItem {
+    case .hamburger: print("burger")
+    case .fries:
+        print ("yummy") 
+        print ("fries")
+    case .drink:
+        print ("drink")
+    case .cookie: print ("cookie")
+}
+```
+The above code would print "yummy" and "fries" on the console, but not "drink" 
+If you put the keyword fallthrough as the last line of a case, it will fall through.
+
+What about the associated data? Associated data is accessed through a switch statement using this let syntax …
+
+```
+var menuItem = FastFoodMenuItem.drink("Coke", ounces: 32)
+
+switch menuItem {
+    case .hamburger(let pattyCount): print("a burger with \(pattyCount) patties!")
+    case .fries(let size): print("a \(size) order of fries!")
+    case .drink(let brand, let ounces): print("a \(ounces)oz \(brand)")
+    case .cookie: print("a cookie!")
+}
+
+```
+
+The above code would print a "a 32oz Coke on the console"
+Note that the local vairables retrieves the associate data that can have a different name 
+(e.g. pattyCount above versus not even having a name in the enum declaration)
+
+### Methods yes, (stored) Properties no
+An enum can have methods (and computed properties) but no stored properties …
+
+```
+enum FastFoodMenuItem {
+    case hamburger(numberOfPatties: Int)
+    case fries(size: FryOrderSize)
+    case drink(String, ounces: Int)
+    case cookie
+
+    func isIncludedInSpecialOrder(number: Int) -> Bool { }
+    var calories: Int { 
+        // switch on self and calculate caloric value here
+    }
+}
+```
+An enum's state is entirely which case it is in and that case’s associated data, nothing more.
+
+
+### Methods yes, (stored) Properties no
+An enum can have methods (and computed properties) but no stored properties …
+
+```
+enum FastFoodMenuItem {
+    case hamburger(numberOfPatties: Int)
+    case fries(size: FryOrderSize)
+    case drink(String, ounces: Int)
+    case cookie
+
+    func isIncludedInSpecialOrder(number: Int) -> Bool { }
+    var calories: Int { 
+        // switch on self and calculate caloric value here
+    }
+}
+```
+
+An enum's state is entirely which case it is in and that case’s associated data, nothing more.
+
