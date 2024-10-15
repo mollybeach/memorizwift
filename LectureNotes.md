@@ -639,3 +639,165 @@ enum FastFoodMenuItem {
 
 An enum's state is entirely which case it is in and that case’s associated data, nothing more.
 
+Metho ds yes, (stored) Properties no
+In an enum's own methods, you can test the enum's state (and get associated data) using self ...
+
+```
+enum FastFoodMenuItem {
+...
+    func isIncludedInSpecialOrder(number: Int) → Bool {
+        switch self {
+            case .hamburger(let pattyCount): return pattyCount == number
+            case .fries, .cookie: return true // a drink and cookie in every special order
+            case .drink(_, let ounces): return ounces = 16 // & 16oz drink of any kind
+        }
+    }
+}
+
+```
+
+Special order 1 is a single patty burger, 2 is double patty (3 is a triple etc)  
+
+Geting all the cases of an enumeration
+```
+enum TeslaModel: CaseIterable {
+    case X
+    case S
+    case Three
+    case Y
+}
+```
+Now this enum will have a static var allCases that you can iterate over.
+
+for model in TeslaModel.allCases {
+    reportSalesNumbers(for: model)
+}
+
+func reportSalesNumbers(for model: TeslaModel){
+    switch model { 
+        //...
+    }
+}
+
+# Optionals
+
+An Optional is just an enum. Period, nothing more.
+
+It essentially looks like this …
+```
+enum Optional<T> { // a generic type, like Array<Element> or MemoryGame<CardContent>
+    case none
+    case some(T) // the some case has associated value of type T
+}
+```
+You can see that it can only have two values: is set (some) or not set (none).
+In the is set case, it can have some associated value tagging along (of "don’t care type" T).
+
+Where do we use Optional?
+Any time we have a value that can sometimes be "not set" or "unspecified" or "undetermined."
+This happens surprisingly often.
+
+That’s why Swift introduces a lot of "syntactic sugar" to make it easy to use Optionals …
+
+Declaring something of type Optional<T> can be done with the syntax T?
+```
+enum Optional<T> {
+    case none
+    case some(<T>)
+}
+```
+var hello: String?
+var hello: String? = "hello"
+var hello: String? = nil
+
+var hello: Optional<String> = .none
+var hello: Optional<String> = .some("hello")
+var hello: Optional<String> = .none
+
+
+Declaring something of type Optional<T> can be done with the syntax T?
+
+You can then assign it the value nil (Optional.none).
+
+Or you can assign it something of the type T (Optional.some with associated value = that value).
+
+Note that Optionals always start out with an implicit = nil.
+
+```
+enum Optional<T> {
+    case none
+    case some(<T>)
+}
+
+var hello: String?
+var hello: String? = "hello"
+var hello: String? = nil
+
+var hello: Optional<String> = .none
+var hello: Optional<String> = .some("hello")
+var hello: Optional<String> = .none
+```
+Optionals
+
+You can access the associated value either by force (with !)...
+
+```
+enum Optional<T> {
+    case none
+    case some(<T>)
+}
+
+let hello: String? = ...
+print(hello!)
+
+switch hello {
+    case .none: // raise an exception (crash)
+    case .some(let data): print(data)
+}
+```
+Optionals
+
+You can access the associated value either by force (with !) ...
+Or "safely" using if let and then using the safely-gotten associated value in { } (else allowed too).
+
+```
+enum Optional<T> {
+    case none
+    case some(<T>)
+}
+
+let hello: String? = ...
+print(hello!)
+
+switch hello {
+    case .none: // raise an exception (crash)
+    case .some(let data): print(data)
+}
+
+if let safehello = hello {
+    print(safehello)
+} else {
+    // do something else
+}
+
+switch hello {
+    case .none: { // do something else }
+    case .some(let safehello): print(safehello)
+}
+```
+Optionals
+
+There's also ?? which does "Optional defaulting". It's called the "nil-coalescing operator".
+
+enum Optional<T> {
+    case none
+    case some(<T>)
+}
+
+let x: String? = ...
+let y = x ?? "foo"
+
+switch x {
+    case .none: y = "foo"
+    case .some(let data): y = data
+}
