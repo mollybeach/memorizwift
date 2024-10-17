@@ -33,7 +33,7 @@ class EmojiMemoryGame: ObservableObject {
     // MARK: - Private Methods
     
     private static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame(numberOfPairsOfCards: 6) { pairIndex in
+        MemoryGame(numberOfPairsOfCards: 12) { pairIndex in
             emojis.indices.contains(pairIndex) ? emojis[pairIndex] : "⁉️"
         }
     }

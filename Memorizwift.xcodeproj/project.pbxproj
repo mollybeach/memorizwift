@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		041D0CA42CC1967C009E2716 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D142C99FD1100AFD5A3 /* ContentView.swift */; };
-		041D0CA52CC1967C009E2716 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D142C99FD1100AFD5A3 /* ContentView.swift */; };
 		04226D132C99FD1100AFD5A3 /* MemorizwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D122C99FD1100AFD5A3 /* MemorizwiftApp.swift */; };
 		04226D152C99FD1100AFD5A3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D142C99FD1100AFD5A3 /* ContentView.swift */; };
 		04226D172C99FD1100AFD5A3 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D162C99FD1100AFD5A3 /* Item.swift */; };
@@ -17,6 +15,7 @@
 		04226D262C99FD1200AFD5A3 /* MemorizwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D252C99FD1200AFD5A3 /* MemorizwiftTests.swift */; };
 		04226D302C99FD1200AFD5A3 /* MemorizwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D2F2C99FD1200AFD5A3 /* MemorizwiftUITests.swift */; };
 		04226D322C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D312C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift */; };
+		0459D8632CC1A11C00074036 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0459D8622CC1A11C00074036 /* AspectVGrid.swift */; };
 		049411CD2C9F5C5E00AC4D9C /* LectureNotes.md in Resources */ = {isa = PBXBuildFile; fileRef = 049411CC2C9F5C5D00AC4D9C /* LectureNotes.md */; };
 		049411D92C9F77E800AC4D9C /* EmojiMemoryGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049411D82C9F77E800AC4D9C /* EmojiMemoryGame.swift */; };
 		049411DB2CA1FCD800AC4D9C /* MemoryGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049411DA2CA1FCD800AC4D9C /* MemoryGame.swift */; };
@@ -52,6 +51,7 @@
 		04226D2F2C99FD1200AFD5A3 /* MemorizwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizwiftUITests.swift; sourceTree = "<group>"; };
 		04226D312C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizwiftUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		044AF0002C9B7E6B00368543 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		0459D8622CC1A11C00074036 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 		049411CC2C9F5C5D00AC4D9C /* LectureNotes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LectureNotes.md; sourceTree = "<group>"; };
 		049411D82C9F77E800AC4D9C /* EmojiMemoryGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMemoryGame.swift; sourceTree = "<group>"; };
 		049411DA2CA1FCD800AC4D9C /* MemoryGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryGame.swift; sourceTree = "<group>"; };
@@ -109,6 +109,7 @@
 			children = (
 				04226D122C99FD1100AFD5A3 /* MemorizwiftApp.swift */,
 				04226D142C99FD1100AFD5A3 /* ContentView.swift */,
+				0459D8622CC1A11C00074036 /* AspectVGrid.swift */,
 				04226D162C99FD1100AFD5A3 /* Item.swift */,
 				04226D182C99FD1200AFD5A3 /* Assets.xcassets */,
 				049411D82C9F77E800AC4D9C /* EmojiMemoryGame.swift */,
@@ -207,7 +208,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					04226D0E2C99FD1100AFD5A3 = {
 						CreatedOnToolsVersion = 15.4;
@@ -276,6 +277,7 @@
 			files = (
 				04226D152C99FD1100AFD5A3 /* ContentView.swift in Sources */,
 				04226D172C99FD1100AFD5A3 /* Item.swift in Sources */,
+				0459D8632CC1A11C00074036 /* AspectVGrid.swift in Sources */,
 				049411DB2CA1FCD800AC4D9C /* MemoryGame.swift in Sources */,
 				04226D132C99FD1100AFD5A3 /* MemorizwiftApp.swift in Sources */,
 				049411D92C9F77E800AC4D9C /* EmojiMemoryGame.swift in Sources */,
@@ -286,7 +288,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				041D0CA42CC1967C009E2716 /* ContentView.swift in Sources */,
 				04226D262C99FD1200AFD5A3 /* MemorizwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,7 +298,6 @@
 			files = (
 				04226D322C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift in Sources */,
 				04226D302C99FD1200AFD5A3 /* MemorizwiftUITests.swift in Sources */,
-				041D0CA52CC1967C009E2716 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,7 +497,6 @@
 		04226D392C99FD1200AFD5A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -517,7 +516,6 @@
 		04226D3A2C99FD1200AFD5A3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -537,7 +535,6 @@
 		04226D3C2C99FD1200AFD5A3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S2ZLKSY96B;
@@ -555,7 +552,6 @@
 		04226D3D2C99FD1200AFD5A3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S2ZLKSY96B;
