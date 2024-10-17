@@ -466,7 +466,6 @@ struct MemorizwiftApp: App {
 
 # Lecture 5: Enums and Optionals
 
-- it can only have discrete status 
 ## Enum
 
 - Enums are another variety of data structure in addition to `struct` and `class`. 
