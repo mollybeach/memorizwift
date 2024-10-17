@@ -774,3 +774,36 @@ ZStack {
 In this example, the `ZStack` content is allowed to extend into the top safe area, overriding the default layout behavior. This can be useful for creating full-screen content or when you want the content to span the entire screen, including areas normally reserved for system elements.
 
 By using `.edgesIgnoringSafeArea`, you can selectively allow content to be drawn into areas that are typically protected by the safe area.
+
+# @ViewBuilder Notes
+
+## Overview
+- `@ViewBuilder` is a mechanism in Swift used to enhance a variable to have special functionality.
+- It simplifies the syntax for creating **lists of views**.
+
+### How it works:
+- Developers can apply `@ViewBuilder` to any function that returns something conforming to `View`.
+- The function still returns a `View`, but it interprets the contents as a **list of Views** and combines them into one.
+
+### Example:
+```swift
+@ViewBuilder
+func front(of card: Card) -> some View {
+    let shape = RoundedRectangle(cornerRadius: 20)
+    shape.fill(.white)
+    shape.stroke()
+    Text(card.content)
+}
+```
+
+- The above would return a `TupleView` combining multiple views (e.g., a `RoundedRectangle` and `Text`).
+- It would be valid to include simple conditionals (`if-else` or `if let`) to determine which views to include.
+
+### Rules for @ViewBuilder:
+- The contents of a `@ViewBuilder` are **just a list of views**. It does not allow arbitrary code.
+- You can use **if-else**, **switch**, or **if let** statements to include or exclude views conditionally.
+- Local `let` bindings are allowed within the `ViewBuilder`.
+- No other types of code are allowed in the function marked with `@ViewBuilder`.
+
+### Key points:
+- Developers don't need to worry about how the views are combined, just that `@ViewBuilder` takes care of assembling the views into one.
