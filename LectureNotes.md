@@ -803,194 +803,211 @@ switch x {
 }
 
 
-The slide explains how the space on-screen is apportioned to the views in SwiftUI. Here's the information presented:
+# Lecture 6: Layout in SwiftUI
 
-Layout
-How is the space on-screen apportioned to the Views?
+## Layout: How is Space Apportioned to Views?
 
 It's amazingly simple ...
 
-Container Views “offer” some or all of the space offered to them to the Views inside them.
-Views then choose what size they want to be (they are the only ones who can do so).
-Container Views then position the Views inside of them.
-This describes the basic flow of layout in SwiftUI where container views manage space distribution and views decide their own size preferences. Let me know if you'd like more details on this topic!
+- **Container Views** “offer” some or all of the space offered to them to the Views inside them.
+- **Views** then choose what size they want to be (they are the only ones who can do so).
+- **Container Views** then position the Views inside of them.
 
-Layout: HStack and VStack
-Stacks divide up the space that is offered to them and then offer that to the Views inside.
-The stack offers space to its “least flexible” (with respect to sizing) subviews first.
-Examples:
-Inflexible View: Image (it wants to be a fixed size).
+This describes the basic flow of layout in SwiftUI where container views manage space distribution, and views decide their own size preferences.
 
-Slightly more flexible View: Text (always wants to size exactly to fit its text).
+## Layout: HStack and VStack
 
-Very flexible View: RoundedRectangle (always uses any space offered).
+### Stacks Dividing Space
 
-Once an offered View(s) takes what it wants, its size is removed from the space available.
+- Stacks divide up the space offered to them and then offer that to the Views inside.
+- The stack offers space to its “least flexible” subviews first.
 
-The stack then moves on to the next “least flexible” Views.
+**Examples**:
+- **Inflexible View**: `Image` (it wants to be a fixed size).
+- **Slightly more flexible View**: `Text` (always wants to size exactly to fit its text).
+- **Very flexible View**: `RoundedRectangle` (always uses any space offered).
 
-Very flexible views (i.e., those that will take all offered space) will share evenly (mostly).
+Once a View takes the space it wants, its size is removed from the available space, and the stack moves on to the next “least flexible” Views. Very flexible views share evenly.
 
-Rinse and repeat.
+### Spacer and Divider
 
-After the Views inside the stack choose their own sizes, the stack sizes itself to fit them.
-If any of the Views in the stack are “very flexible,” then the stack will also be “very flexible.”
-This provides a detailed explanation of how SwiftUI stacks allocate space, prioritize subviews based on flexibility, and adapt their own size accordingly. Let me know if you need further details or examples!
+- **Spacer(minLength: CGFloat)**
+  - Takes all the space offered.
+  - Draws nothing.
+  - `minLength` defaults to platform-appropriate spacing.
 
+- **Divider()**
+  - Draws a dividing line crosswise to the stack direction.
+  - Takes the minimum space to fit the line, and all crosswise space.
 
-The slide provides details about some useful views (Spacer and Divider) in SwiftUI that are commonly used in HStack and VStack. Here's the information:
+These views are essential for creating flexible, visually organized layouts in SwiftUI.
 
-Layout: HStack and VStack
-There are a couple of really valuable Views for layout that are commonly put in stacks:
+### layoutPriority(Double)
 
-Spacer(minLength: CGFloat)
+This can override which views get space first, regardless of their flexibility. By default, all views have a layout priority of 0.
 
-Always takes all the space offered to it.
-Draws nothing.
-The minLength defaults to the most likely spacing you’d want on a given platform.
-Divider()
-
-Draws a dividing line cross-wise to the way the stack is laying out.
-For example, in an HStack, Divider draws a vertical line.
-Takes the minimum space needed to fit the line in the direction the stack is going.
-Takes all the space offered to it in the other (cross-wise) direction.
-These views are essential for creating flexible and visually organized layouts in SwiftUI. Let me know if you have any more questions!
-Layout: HStack and VStack
-layoutPriority(Double) can override which views get space first, regardless of their flexibility. By default, all views have a layout priority of 0.
-Example:
-```
+```swift
 HStack {
     Text("Important").layoutPriority(10)  // Higher priority
     Image(systemName: "arrow.up")  // Default priority (0)
     Text("Unimportant")
 }
 ```
-The Text("Important") will get the space it needs first, due to its higher layout priority.
-Then, the Image will get its space because it is less flexible than the Text("Unimportant").
-Finally, the Text("Unimportant") will fit into any remaining space, and if it doesn't get enough space, it may get truncated (e.g., "Swift is..." instead of "Swift is great!").
-This shows how layoutPriority gives control over space distribution when laying out views in SwiftUI.
 
-Layout: HStack and VStack
-Another crucial aspect of how stacks arrange the views they contain is alignment.
+The `Text("Important")` will get the space it needs first due to its higher layout priority. Then, the `Image` will get its space because it is less flexible than the `Text("Unimportant")`. Finally, the `Text("Unimportant")` will fit into any remaining space, and if it doesn't get enough space, it may be truncated (e.g., "Swift is..." instead of "Swift is great!").
 
-When a VStack lays out views in a column, how are the views aligned if they have different widths? Are they left-aligned, centered, or something else?
+## Alignment in HStack and VStack
 
-Alignment is specified through an argument to the stack, for example:
+When stacking views with different widths, alignment determines their positioning (e.g., left-aligned, centered).
 
-```
-VStack(alignment: .leading) { ... }
-```
-Why .leading instead of .left?
-Stacks adjust automatically for environments where text is laid out from right to left (such as Arabic or Hebrew).
-
-The .leading alignment positions the views relative to the start of the text flow.
-
-Text baselines can also be used for alignment:
-
-```
-HStack(alignment: .firstTextBaseline) { ... }
+```swift
+VStack(alignment: .leading) { 
+    // Views go here
+}
 ```
 
-You can even define your own alignment guides, but this is beyond the scope of this course.
+- **.leading** adjusts automatically for text flow direction (e.g., right-to-left languages like Arabic or Hebrew).
+- Text baselines can also be used for alignment:
 
-SwiftUI provides built-in alignment options like text baselines, center, top, trailing, etc., for positioning views flexibly.
-LazyHStack and LazyVStack
-These "lazy" stacks don’t build any of their views that are not currently visible.
-They do not take up all the space offered, even if they have flexible views inside.
-Use case: Ideal when the stack is within a ScrollView.
-LazyHGrid and LazyVGrid
-These grids size their views based on the configuration (e.g., the columns argument in a grid).
-The other direction (opposite to the grid’s axis) can grow and shrink as more views are added.
-Efficiency: The grid does not take all the space if it doesn’t need it.
-Grid
-A general grid that allocates space to its views both horizontally and vertically (no "H" or "V" in its name).
-Offers various alignment options for columns and rows via grid*() modifiers.
-Use case: Often used as a "spreadsheet" view or for displaying tabular data.
+```swift
+HStack(alignment: .firstTextBaseline) {
+    Text("SwiftUI")    // Aligned by the first text baseline
+    Text("Layouts")
+}
+```
 
-ScrollView
-ScrollView takes all the space offered to it.
-The views inside are sized to fit along the axis of scrolling.
-ViewThatFits
-Takes a list of container views (e.g., HStack and VStack) and picks the one that best fits the available space.
-Useful for handling different layouts in landscape vs. portrait mode or when accommodating dynamic type sizes (like large fonts that may not fit horizontally).
-Form, List, OutlineGroup, and DisclosureGroup
-These act like “really smart VStacks” with additional features like scrolling, selection, and hierarchy.
-They are more advanced than basic stacks and offer a structured layout.
-Custom Implementations of the Layout Protocol
-You can create custom views by implementing the Layout protocol.
-This allows control over the "offer space, let views choose their size, then position them" process using methods like sizeThatFits and placeSubviews.
+You can also define your own alignment guides, though this is beyond the scope of this lecture.
 
-ZStack
-ZStack sizes itself to fit its children.
-If even one child is fully flexible in size, the ZStack will also be flexible.
-.background Modifier
-swift
-Copy code
+## LazyHStack and LazyVStack
+
+- **LazyHStack** and **LazyVStack**: These “lazy” stacks only build views that are currently visible.
+  - They don’t take up all the space offered, even if they contain flexible views.
+  - **Use case**: Ideal when the stack is within a `ScrollView`.
+
+## LazyHGrid and LazyVGrid
+
+- **LazyHGrid** and **LazyVGrid**: These grids size their views based on the configuration (e.g., number of columns in a grid).
+  - The opposite direction (perpendicular to the grid’s axis) can grow or shrink as more views are added.
+  - **Efficiency**: The grid does not take up all the space if it doesn’t need it.
+  
+## Grid
+
+- **Grid**: A general-purpose grid that allocates space to its views both horizontally and vertically (hence no “H” or “V”).
+  - Offers alignment options for both columns and rows using grid modifiers like `gridColumnAlignment()` and `gridRowAlignment()`.
+  - **Use case**: Often used to create a "spreadsheet" or tabular display of data.
+
+## ScrollView
+
+- **ScrollView**: Takes up all the space offered to it and enables scrolling along a specified axis.
+  - The views inside a `ScrollView` are sized to fit along the axis of scrolling (e.g., horizontally or vertically).
+
+## ViewThatFits
+
+- **ViewThatFits**: Chooses from a list of container views (e.g., `HStack`, `VStack`) and picks the one that best fits the available space.
+  - Useful for handling different layouts in landscape vs. portrait mode, or accommodating dynamic type sizes (like larger fonts).
+
+## Advanced Stacks: Form, List, OutlineGroup, and DisclosureGroup
+
+- These views act like "smart" VStacks with additional functionality, such as scrolling, selection, and hierarchy.
+
+  - **Form**: Used for building structured input forms.
+  - **List**: Displays rows of data in a scrollable container.
+  - **OutlineGroup**: Ideal for showing hierarchical data.
+  - **DisclosureGroup**: Collapsible container for showing/hiding content.
+
+## Custom Implementations of the Layout Protocol
+
+- You can create custom views by implementing the **Layout** protocol.
+  - This allows complete control over the "offer space, let views choose their size, then position them" process using methods like `sizeThatFits` and `placeSubviews`.
+
+## ZStack
+
+- **ZStack**: Stacks views on top of one another, with the last view being on top.
+  - Sizes itself to fit its children, and if one child is flexible, the entire stack will be flexible as well.
+
+### .background Modifier
+
+```swift
 Text("hello").background(Rectangle().foregroundColor(.red))
-This is similar to making a ZStack with a Text and Rectangle (with the Text in front).
-However, in this case, the resulting view will be sized to the Text, and the Rectangle is not involved in the layout sizing.
-The layout is determined solely by the Text, effectively making a "mini-ZStack" of two elements.
-.overlay Modifier
-swift
-Copy code
+```
+
+This works like a mini-ZStack, where the `Text` controls the layout. The `Rectangle` just adds background color without impacting the layout size.
+
+### .overlay Modifier
+
+```swift
 Circle().overlay(Text("Hello"), alignment: .center)
-This follows the same layout rules as .background, but stacks the views in the opposite order.
-Here, the view is sized to the Circle (which is fully flexible), and the Text is stacked on top of it.
-The Text will be positioned based on the alignment specified inside the Circle (in this case, centered).
-This explanation demonstrates how these modifiers control the layout of overlapping views in SwiftUI.
+```
 
-This slide explains how modifiers work in SwiftUI, especially in relation to layout and sizing.
+In this example, the Circle is fully flexible and determines the overall size, with the `Text` stacked on top and centered.
 
-Modifiers
-View modifiers (such as .padding) return a modified view. Conceptually, the modifier "contains" the view it is modifying.
-Many modifiers simply pass the size offered to them along (like .font or .foregroundColor), but some modifiers actively participate in the layout process.
-Example: .padding
-The view returned by .padding(10) offers the view it is modifying a space that is the same size as it was originally offered, but reduced by 10 points on each side.
-The modified view then chooses a size for itself that is 10 points larger on all sides than the size chosen by the original view.
-Example: .aspectRatio
-The view returned by the .aspectRatio modifier takes the space offered and chooses a size for itself that either:
-.fit: Fits within the offered space while maintaining the aspect ratio.
-.fill: Uses all the available space (or more) while maintaining the aspect ratio.
-A view can choose a size larger than the space originally offered if necessary.
-This explains how layout-related modifiers adjust the space and size of views they modify in SwiftUI, providing flexibility in how views are rendered.
-This slide explains the use of GeometryReader in SwiftUI.
+## Modifiers in SwiftUI
 
-GeometryReader
-You wrap a GeometryReader view around what would normally appear in your view’s body to get access to the size and position information of the container that is offering the space.
-Example:
-swift
-Copy code
-var body: View {
+### Modifiers and Layout
+
+- Modifiers, such as `.padding`, return a modified view and can adjust how space is distributed.
+
+```swift
+Text("SwiftUI Layout").padding(10)
+```
+
+This applies 10 points of padding around the text, adjusting its total size.
+
+### .aspectRatio Modifier
+
+The `.aspectRatio` modifier controls how a view resizes to fit within its available space while maintaining a specified aspect ratio.
+
+```swift
+Image(systemName: "photo").aspectRatio(contentMode: .fit)
+```
+
+The view returned by `.aspectRatio` can choose to either:
+- **.fit**: The content will resize to fit inside the available space while maintaining its aspect ratio.
+- **.fill**: The content will expand to fill the entire available space while maintaining its aspect ratio, which may result in some content being cropped.
+
+## GeometryReader
+
+The `GeometryReader` view allows you to access information about the size and position of its parent container.
+
+```swift
+var body: some View {
     GeometryReader { geometry in
-        // Use geometry information here
+        Text("Width: \(geometry.size.width), Height: \(geometry.size.height)")
     }
 }
-The geometry parameter is a GeometryProxy, which provides:
+```
 
-size: The amount of space offered by the container (CGSize).
-frame(in:): The view's frame in a specific coordinate space (CGRect).
-safeAreaInsets: The insets that define the safe area (EdgeInsets).
-Key Point: The size provided by GeometryReader is the total space offered to the view by its parent container.
+The `geometry` parameter is a **GeometryProxy**, which provides:
+- **size**: The total space offered by the parent container (`CGSize`).
+- **frame(in:)**: The view's frame in a specific coordinate space (`CGRect`).
+- **safeAreaInsets**: Insets around the safe area (`EdgeInsets`).
 
-GeometryReader itself accepts all the space offered to it, which means it will expand to fill the available space.
+### Key Point:
 
-This layout tool is useful when you need to adjust your view’s content based on its size or position within the overall interface.
+`GeometryReader` itself always accepts all the space offered to it, meaning it will expand to fill the available space. It's particularly useful for adjusting the layout based on the view's size or position within the interface.
 
-This slide explains the concept of the Safe Area in SwiftUI and how to manage drawing inside or outside of it.
+### Example of GeometryReader:
 
-Safe Area
-Safe areas represent portions of the screen where views should not draw content. For example, the notch on iPhones (like iPhone X and later) is considered part of the safe area.
+```swift
+GeometryReader { geometry in
+    Text("Available width: \(geometry.size.width), Available height: \(geometry.size.height)")
+}
+```
 
-Surrounding views or elements may introduce their own safe areas to ensure important content isn’t obscured.
+In this example, `GeometryReader` provides the width and height of the parent container, allowing the layout to adapt dynamically based on the available space.
 
-Normally, views are constrained to avoid drawing in safe areas, but you can choose to override this behavior and draw into those areas using the .edgesIgnoringSafeArea modifier.
+## Safe Area
 
-Example:
-swift
-Copy code
+The **safe area** represents portions of the screen where views should not draw content, such as the area around the notch on iPhones or the home indicator.
+
+By default, views are constrained to avoid drawing into the safe area, but this behavior can be overridden using the `.edgesIgnoringSafeArea` modifier.
+
+```swift
 ZStack {
-    ...
-}.edgesIgnoringSafeArea([.top])  // Allows drawing into the top safe area
-In this example, the content inside the ZStack is allowed to extend into the top edge's safe area, overriding the default behavior.
-This is useful for cases where you want full-screen content or where drawing into the safe area enhances the user experience.
+    Text("Hello, World!")
+}.edgesIgnoringSafeArea([.top])
+```
 
+In this example, the `ZStack` content is allowed to extend into the top safe area, overriding the default layout behavior. This can be useful for creating full-screen content or when you want the content to span the entire screen, including areas normally reserved for system elements.
+
+By using `.edgesIgnoringSafeArea`, you can selectively allow content to be drawn into areas that are typically protected by the safe area.
