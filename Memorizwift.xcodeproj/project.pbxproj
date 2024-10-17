@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		041D0CA42CC1967C009E2716 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D142C99FD1100AFD5A3 /* ContentView.swift */; };
+		041D0CA52CC1967C009E2716 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D142C99FD1100AFD5A3 /* ContentView.swift */; };
 		04226D132C99FD1100AFD5A3 /* MemorizwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D122C99FD1100AFD5A3 /* MemorizwiftApp.swift */; };
 		04226D152C99FD1100AFD5A3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D142C99FD1100AFD5A3 /* ContentView.swift */; };
 		04226D172C99FD1100AFD5A3 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04226D162C99FD1100AFD5A3 /* Item.swift */; };
@@ -284,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				041D0CA42CC1967C009E2716 /* ContentView.swift in Sources */,
 				04226D262C99FD1200AFD5A3 /* MemorizwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,6 +297,7 @@
 			files = (
 				04226D322C99FD1200AFD5A3 /* MemorizwiftUITestsLaunchTests.swift in Sources */,
 				04226D302C99FD1200AFD5A3 /* MemorizwiftUITests.swift in Sources */,
+				041D0CA52CC1967C009E2716 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

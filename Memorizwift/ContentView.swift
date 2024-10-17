@@ -19,12 +19,14 @@ struct ContentView: View {
             Button("Shuffle") {
                 viewModel.shuffle()
             }
+            .background(Color.blue)
         }
+        .background(.yellow)
         .padding()
     }
     
     var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing: 0)], spacing: 0) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 65), spacing: 0)], spacing: 0) {
             
             ForEach(viewModel.cards) { card in
                 CardView(card)
