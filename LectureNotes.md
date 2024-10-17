@@ -1,5 +1,12 @@
 # Lecture Notes
 
+# Table of Contents
+
+- [Lecture 3: Architecture in Swift (MVVM)](#lecture-3-architecture-in-swift-mvvm)
+- [Lecture 4: Memory Game in Swift](#lecture-4-memory-game-in-swift)
+- [Lecture 5: Enums and Optionals](#lecture-5-enums-and-optionals)
+- [Lecture 6: Layout in SwiftUI](#lecture-6-layout-in-swiftui)
+
 # Lecture 3: Architecture in Swift (MVVM)
 
 ## MVVM: Model-View-ViewModel
