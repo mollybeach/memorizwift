@@ -463,13 +463,16 @@ struct MemorizwiftApp: App {
      */
 
 
-# Lecture 5
 
-## enum
+# Lecture 5: Enums and Optionals
 
-- another variety of data structure in addition to struct and class 
 - it can only have discrete status 
-```
+## Enum
+
+- Enums are another variety of data structure in addition to `struct` and `class`. 
+- Enums can only have discrete states.
+
+```swift
 enum FastFoodMenuItem {
     case hamburger
     case fries
@@ -477,331 +480,209 @@ enum FastFoodMenuItem {
     case cookie
 }
 ```
-- an enum is a value type (like struct), so its is copied and passed around
+
+- An enum is a **value type** (like `struct`), so it is copied and passed around.
 
 ### Associated Data
-- Each state can (but does not have to have it's own 'associated data')
-```
+
+- Each state of an enum can (but does not have to) have its own 'associated data'.
+
+```swift
 enum FastFoodMenuItem {
     case hamburger(numberOfPatties: Int)
-    case fries (size: FryOrderSize)
-    case drink (String, ounces: Int)
+    case fries(size: FryOrderSize)
+    case drink(String, ounces: Int)
     case cookie
 }
 ```
-- Note that the drink case has 2 pieces of associated data (one of them "unnamed)
-- In the example above, FryOrderSize would also probably be an enum for example...
-```
+
+- The `drink` case has two pieces of associated data, one of them unnamed.
+- In the example above, `FryOrderSize` would likely also be an enum:
+
+```swift
 enum FryOrderSize {
     case large
     case small
 }
 ```
-### Setting a value of enum 
-- Just use the name of the type along with the case you want seperated by a dot...
-```
-let menuItem: FastFooMenuItem = FastFoodMenuItem.hamburger(patties:2)
-var otherItem: FastFooMenuItem = FastFoodMenuItem.cookie
-var yetAnotherItem = .cookie // swift can't figure this out
 
-### Checking an enum's state
-An enum's state is usually checked with a switch statement ...
-(although we could use an if statement, but this is unusual if there is associated data)
+### Setting a Value of an Enum
 
-```
-var menuItem = FastFoodMenuItem.hamburger(patties: 2)
+- Use the type name and the case you want, separated by a dot.
 
-switch menuItem {
-case FastFoodMenuItem.hamburger: print ("burger")
-case FastFoodMenuItem.fries: print("fries")
-case FastFoodMenuItem.drink: print ("drink")
-case FastFoodMenuItem.cookie: print ("cookie")
-}
-```
-Note that we are ignoring the "associated data" above ... so far ...
-
-It is not necessary to use the fully-expressed FastFoodMenuItem.fries inside the switch
-(since Swift can infer the FastFoodMenuItem part of that) 
-
-### break
-
-If you don't want to do something with a given case use break
-
-```
-var menuItem = FastFoodMenuItem.hamburger(patties: 2)
-
-switch menuItem {
-case .hamburger break
-case .fries: print("fries")
-case .drink: print ("drink")
-case .cookie: print ("cookie")
-}
-```
-This code would print nothing to the console
-
-### default
-A switch must handle all possible cases (although you can default uninteresting cases) ...
-
-```
-var menuItem = FastFoodMenuItem.cookie
-
-switch menuItem {
-case .hamburger: break 
-case .fries: print ("fries")
-default: print ("other")
-}
-
-If the menuItem was a cookie, the above item would print "other" on the console
-
-You can switch on any type (not just enum), by the way, for example ...
-```
-let s: String = "hello"
-
-switch {
-case "goodbye": ... 
-case "hello": ...
-default: ... // gotta have this for String because switch has to cover ALL cases
-｝
+```swift
+let menuItem: FastFoodMenuItem = FastFoodMenuItem.hamburger(numberOfPatties: 2)
+var otherItem: FastFoodMenuItem = FastFoodMenuItem.cookie
+var yetAnotherItem = .cookie // Swift can infer this
 ```
 
-### Multiple lines allowed
-Each case in a switch can be multiple lines and does NOT fall through to the next case ...
+### Checking an Enum's State
 
-```
-var menuItem = FastFoodMenuItem.fries(size: FryOrderSize.large)
+- Enum states are usually checked with a `switch` statement (an `if` statement is unusual, especially if there is associated data).
+
+```swift
+var menuItem = FastFoodMenuItem.hamburger(numberOfPatties: 2)
 
 switch menuItem {
     case .hamburger: print("burger")
-    case .fries:
-        print ("yummy") 
-        print ("fries")
-    case .drink:
-        print ("drink")
-    case .cookie: print ("cookie")
+    case .fries: print("fries")
+    case .drink: print("drink")
+    case .cookie: print("cookie")
 }
 ```
-The above code would print "yummy" and "fries" on the console, but not "drink" 
-If you put the keyword fallthrough as the last line of a case, it will fall through.
 
-What about the associated data? Associated data is accessed through a switch statement using this let syntax …
+- It's not necessary to fully write out `FastFoodMenuItem.fries` inside the `switch` (since Swift can infer it).
 
+### `break` in Switch
+
+- If you don't want to do anything for a given case, use `break`.
+
+```swift
+switch menuItem {
+    case .hamburger: break
+    case .fries: print("fries")
+    case .drink: print("drink")
+    case .cookie: print("cookie")
+}
 ```
-var menuItem = FastFoodMenuItem.drink("Coke", ounces: 32)
 
+- This code would print nothing to the console.
+
+### `default` in Switch
+
+- A `switch` must handle all possible cases, though you can use `default` to handle uninteresting cases.
+
+```swift
+switch menuItem {
+    case .hamburger: break
+    case .fries: print("fries")
+    default: print("other")
+}
+```
+
+- If `menuItem` is a `cookie`, the above would print "other".
+
+### Multiple Lines in Switch Cases
+
+- Each case in a `switch` can have multiple lines and does **not** fall through to the next case unless specified with `fallthrough`.
+
+```swift
+switch menuItem {
+    case .hamburger: print("burger")
+    case .fries:
+        print("yummy")
+        print("fries")
+    case .drink: print("drink")
+    case .cookie: print("cookie")
+}
+```
+
+- The above code would print "yummy" and "fries" but not "drink".
+
+### Accessing Associated Data
+
+- Associated data can be accessed in a `switch` using the `let` syntax.
+
+```swift
 switch menuItem {
     case .hamburger(let pattyCount): print("a burger with \(pattyCount) patties!")
     case .fries(let size): print("a \(size) order of fries!")
     case .drink(let brand, let ounces): print("a \(ounces)oz \(brand)")
     case .cookie: print("a cookie!")
 }
-
 ```
 
-The above code would print a "a 32oz Coke on the console"
-Note that the local vairables retrieves the associate data that can have a different name 
-(e.g. pattyCount above versus not even having a name in the enum declaration)
+### Methods in Enums
 
-### Methods yes, (stored) Properties no
-An enum can have methods (and computed properties) but no stored properties …
+- Enums can have methods and computed properties but no stored properties.
 
-```
+```swift
 enum FastFoodMenuItem {
     case hamburger(numberOfPatties: Int)
     case fries(size: FryOrderSize)
     case drink(String, ounces: Int)
     case cookie
 
-    func isIncludedInSpecialOrder(number: Int) -> Bool { }
-    var calories: Int { 
-        // switch on self and calculate caloric value here
-    }
-}
-```
-An enum's state is entirely which case it is in and that case’s associated data, nothing more.
-
-
-### Methods yes, (stored) Properties no
-An enum can have methods (and computed properties) but no stored properties …
-
-```
-enum FastFoodMenuItem {
-    case hamburger(numberOfPatties: Int)
-    case fries(size: FryOrderSize)
-    case drink(String, ounces: Int)
-    case cookie
-
-    func isIncludedInSpecialOrder(number: Int) -> Bool { }
-    var calories: Int { 
-        // switch on self and calculate caloric value here
-    }
-}
-```
-
-An enum's state is entirely which case it is in and that case’s associated data, nothing more.
-
-Metho ds yes, (stored) Properties no
-In an enum's own methods, you can test the enum's state (and get associated data) using self ...
-
-```
-enum FastFoodMenuItem {
-...
-    func isIncludedInSpecialOrder(number: Int) → Bool {
+    func isIncludedInSpecialOrder(number: Int) -> Bool {
         switch self {
             case .hamburger(let pattyCount): return pattyCount == number
-            case .fries, .cookie: return true // a drink and cookie in every special order
-            case .drink(_, let ounces): return ounces = 16 // & 16oz drink of any kind
+            case .fries, .cookie: return true
+            case .drink(_, let ounces): return ounces == 16
         }
     }
 }
-
 ```
 
-Special order 1 is a single patty burger, 2 is double patty (3 is a triple etc)  
+- The above method checks if the item is included in a special order (e.g., a 16oz drink or a burger with a specific number of patties).
 
-Geting all the cases of an enumeration
-```
+### Getting All Cases of an Enum
+
+- Use the `CaseIterable` protocol to get all cases of an enum.
+
+```swift
 enum TeslaModel: CaseIterable {
     case X
     case S
     case Three
     case Y
 }
-```
-Now this enum will have a static var allCases that you can iterate over.
 
 for model in TeslaModel.allCases {
     reportSalesNumbers(for: model)
 }
-
-func reportSalesNumbers(for model: TeslaModel){
-    switch model { 
-        //...
-    }
-}
-
-# Optionals
-
-An Optional is just an enum. Period, nothing more.
-
-It essentially looks like this …
 ```
-enum Optional<T> { // a generic type, like Array<Element> or MemoryGame<CardContent>
-    case none
-    case some(T) // the some case has associated value of type T
-}
-```
-You can see that it can only have two values: is set (some) or not set (none).
-In the is set case, it can have some associated value tagging along (of "don’t care type" T).
 
-Where do we use Optional?
-Any time we have a value that can sometimes be "not set" or "unspecified" or "undetermined."
-This happens surprisingly often.
+## Optionals
 
-That’s why Swift introduces a lot of "syntactic sugar" to make it easy to use Optionals …
+- An `Optional` is just an enum. It essentially looks like this:
 
-Declaring something of type Optional<T> can be done with the syntax T?
-```
+```swift
 enum Optional<T> {
     case none
-    case some(<T>)
+    case some(T)
 }
 ```
-var hello: String?
+
+- Optionals can have two states: `.none` (nil) or `.some(T)` (with associated data of type `T`).
+
+### Declaring Optionals
+
+- Declaring an optional can be done with the syntax `T?`.
+
+```swift
 var hello: String? = "hello"
-var hello: String? = nil
+var goodbye: String? = nil
+```
 
-var hello: Optional<String> = .none
+- You can also use the fully expressed `Optional<T>` form:
+
+```swift
 var hello: Optional<String> = .some("hello")
-var hello: Optional<String> = .none
-
-
-Declaring something of type Optional<T> can be done with the syntax T?
-
-You can then assign it the value nil (Optional.none).
-
-Or you can assign it something of the type T (Optional.some with associated value = that value).
-
-Note that Optionals always start out with an implicit = nil.
-
+var goodbye: Optional<String> = .none
 ```
-enum Optional<T> {
-    case none
-    case some(<T>)
-}
 
-var hello: String?
-var hello: String? = "hello"
-var hello: String? = nil
+### Accessing the Value of an Optional
 
-var hello: Optional<String> = .none
-var hello: Optional<String> = .some("hello")
-var hello: Optional<String> = .none
-```
-Optionals
+- Access the value of an optional either by force (`!`) or safely using `if let`.
 
-You can access the associated value either by force (with !)...
-
-```
-enum Optional<T> {
-    case none
-    case some(<T>)
-}
-
-let hello: String? = ...
-print(hello!)
-
-switch hello {
-    case .none: // raise an exception (crash)
-    case .some(let data): print(data)
-}
-```
-Optionals
-
-You can access the associated value either by force (with !) ...
-Or "safely" using if let and then using the safely-gotten associated value in { } (else allowed too).
-
-```
-enum Optional<T> {
-    case none
-    case some(<T>)
-}
-
-let hello: String? = ...
-print(hello!)
-
-switch hello {
-    case .none: // raise an exception (crash)
-    case .some(let data): print(data)
-}
-
-if let safehello = hello {
-    print(safehello)
+```swift
+if let safeHello = hello {
+    print(safeHello)
 } else {
-    // do something else
-}
-
-switch hello {
-    case .none: { // do something else }
-    case .some(let safehello): print(safehello)
+    print("hello is nil")
 }
 ```
-Optionals
 
-There's also ?? which does "Optional defaulting". It's called the "nil-coalescing operator".
+### Nil-Coalescing Operator `??`
 
-enum Optional<T> {
-    case none
-    case some(<T>)
-}
+- The `??` operator provides a default value if the optional is nil.
 
-let x: String? = ...
-let y = x ?? "foo"
+```swift
+let x: String? = nil
+let y = x ?? "default value"
+```
 
-switch x {
-    case .none: y = "foo"
-    case .some(let data): y = data
-}
-
+- In this case, `y` will be assigned "default value" if `x` is nil.
 
 # Lecture 6: Layout in SwiftUI
 
