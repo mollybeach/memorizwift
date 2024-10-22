@@ -1,14 +1,16 @@
 # Lecture Notes
 
 # Table of Contents
-- [Lecture 1: Lecture 1](#lecture-1)
-- [Lecture 1: Lecture 2 ](#lecture-2)
+- [Lecture 1: Introduction to SwiftUI and View Basics](#lecture-1-introduction-to-swiftui-and-view-basics)
+- [Lecture 2: MVVM and SwiftUI Essentials](#lecture-2-mvvm-and-swiftui-essentials)
 - [Lecture 3: Architecture in Swift (MVVM)](#lecture-3-architecture-in-swift-mvvm)
 - [Lecture 4: Memory Game in Swift](#lecture-4-memory-game-in-swift)
 - [Lecture 5: Enums and Optionals](#lecture-5-enums-and-optionals)
 - [Lecture 6: Layout in SwiftUI](#lecture-6-layout-in-swiftui)
+- [Lecture 7: Drawing, Animating, and View Modifiers in SwiftUI](#lecture-7-drawing-animating-and-view-modifiers-in-swiftui)
 
-## Lecture 01
+
+## Lecture 1: Introduction to SwiftUI and View Basics
 * `some View` allows for any struct to be returned as long as it conforms to the View protocol.
 * `@ViewBuilder` combines multiple views and returns a single View.
     * Expressions are forbidden.
@@ -20,7 +22,7 @@ var myView: some View {
 }
 ```
 
-## Lecture 02
+## Lecture 2: MVVM and SwiftUI Essentials
 * Trailing closures (last argument is a closure).
 ```swift
 ZStack(alignment: .top) {
@@ -1297,4 +1299,5 @@ You don’t need to be an expert in functional programming to use SwiftUI effect
 - `ViewModifier` allows for flexible customization of views.
 - Animations are easy to implement and customize.
 - Custom shapes allow you to create unique UI elements.
+
 
