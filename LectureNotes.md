@@ -10,7 +10,7 @@
 - [Lecture 7: Drawing, Animating, and View Modifiers in SwiftUI](#lecture-7-drawing-animating-and-view-modifiers-in-swiftui)
 
 
-## Lecture 1: Introduction to SwiftUI and View Basics
+# Lecture 1: Introduction to SwiftUI and View Basics
 * `some View` allows for any struct to be returned as long as it conforms to the View protocol.
 * `@ViewBuilder` combines multiple views and returns a single View.
     * Expressions are forbidden.
@@ -22,7 +22,7 @@ var myView: some View {
 }
 ```
 
-## Lecture 2: MVVM and SwiftUI Essentials
+# Lecture 2: MVVM and SwiftUI Essentials
 * Trailing closures (last argument is a closure).
 ```swift
 ZStack(alignment: .top) {
