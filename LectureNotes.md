@@ -35,8 +35,6 @@ ZStack(alignment: .top) {
 
 # Lecture 3: Architecture in Swift (MVVM)
 
-# Lecture 3: Architecture in Swift (MVVM)
-
 ## Table of Contents
 1. [MVVM: Model-View-ViewModel](#mvvm-model-view-viewmodel)
 2. [Connecting the Model to the UI](#connecting-the-model-to-the-ui)
