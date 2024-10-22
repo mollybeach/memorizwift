@@ -830,3 +830,471 @@ func front(of card: Card) -> some View {
 
 ### Key points:
 - Developers don't need to worry about how the views are combined, just that `@ViewBuilder` takes care of assembling the views into one.
+
+# Lecture 7: Drawing, Animating, and View Modifiers in SwiftUI
+
+## Today’s Agenda
+
+- **Demo Interlude**:
+  - Separating a View into its own Swift file (demo: `CardView`).
+  - Dealing with constants in your Swift code.
+
+- **Shape**:
+  - Drawing your own custom shape.
+  - Demo: Drawing (but not yet animating) a "pie-shaped" countdown timer on our cards.
+
+- **Animation**:
+  - How does it work?
+
+- **ViewModifier**:
+  - What exactly are functions like `foregroundColor`, `font`, `padding`, etc. doing?
+
+---
+
+## Shape in SwiftUI
+
+### What is a Shape?
+
+- **Shape** is a protocol that inherits from `View`.
+- In other words, all shapes are also views in SwiftUI.
+- Examples of shapes already in SwiftUI include:
+  - `RoundedRectangle`
+  - `Circle`
+  - `Capsule`
+
+### Drawing Shapes
+
+- By default, shapes draw themselves by filling with the current foreground color.
+- You can modify this by using `.stroke()` and `.fill()` to change the way the shape is drawn.
+- These modifiers return a `View` that draws the shape in the specified way (by stroking or filling).
+
+### Modifying Shapes
+
+- The arguments to `.stroke()` and `.fill()` are quite interesting.
+- Initially, it might seem that the argument to `.fill()` is a color (e.g., `Color.white`), but this isn’t always the case.
+
+```swift
+func fill<S>(_ whatToFillWith: S) -> View where S: ShapeStyle
+```
+
+- This is a **generic function**, and `S` is a placeholder for a type that conforms to the `ShapeStyle` protocol.
+- `ShapeStyle` turns a `Shape` into a `View` by applying some styling to it.
+- Examples of `ShapeStyle` include:
+  - `Color`
+  - `ImagePaint`
+  - `AngularGradient`
+  - `LinearGradient`
+
+---
+
+## Creating Custom Shapes
+
+### How to Create Your Own Shape
+
+- The `Shape` protocol (by extension) implements the `View`'s body var for you.
+- However, it introduces its own function that you are required to implement:
+
+```swift
+func path(in rect: CGRect) -> Path {
+    return Path()
+}
+```
+
+- In this function, you will create and return a `Path` that draws anything you want.
+- The `Path` struct has many functions to support drawing, such as:
+  - Lines
+  - Arcs
+  - Bezier curves
+  - etc.
+
+### Example: Timer Countdown Pie
+
+- In our demo, we will add a "timer countdown pie" to our `CardView` (currently without animation).
+
+---
+
+## ViewModifier
+
+- View modifiers in SwiftUI are essentially functions that modify the appearance or behavior of a view.
+- Examples include:
+  - `foregroundColor`
+  - `font`
+  - `padding`
+  - `frame`
+- These modifiers return a modified `View`, allowing you to chain multiple modifiers together in a declarative manner.
+
+---
+
+## Animation in SwiftUI
+
+- Animations in SwiftUI are built by simply adding the `.animation()` modifier to views.
+- This tells SwiftUI to animate any changes to the view’s state in a smooth, coordinated fashion.
+- **Animation** is crucial for a mobile UI, and SwiftUI makes it very easy to implement.
+- One way to perform animations is by animating a **Shape**.
+- Another way is by animating **Views** via their **ViewModifiers**.
+  
+### Animating Shapes
+
+- In the upcoming demo, we will show how to animate a pie-shaped countdown timer by animating a Shape.
+
+---
+
+## ViewModifier in SwiftUI
+
+### What is a ViewModifier?
+
+- You’ve used many functions that modify views (like `aspectRatio` and `padding`).
+- These functions likely turn around and call the `.modifier()` function in the View.
+
+Example:
+
+```swift
+.aspectRatio(2/3) is likely something like .modifier(AspectModifier(2/3))
+```
+
+- **AspectModifier** can be anything that conforms to the **ViewModifier** protocol.
+
+### The ViewModifier Protocol
+
+- The **ViewModifier** protocol has a single function that creates a new View based on the thing passed to it.
+  
+```swift
+protocol ViewModifier {
+    func body(content: Content) -> some View {
+        return some View that likely contains content
+    }
+}
+```
+
+- When we call `.modifier` on a view, the `content` passed to this function is the view itself.
+
+Example:
+
+```swift
+aView.modifier(MyViewModifier(arguments: …))
+```
+
+- `MyViewModifier` implements `ViewModifier`, and `aView` will be passed to its body function via the `content`.
+
+---
+
+## Example: Creating a ViewModifier
+
+### Learning by Example
+
+- Let’s say we want to create a modifier that "card-ifies" a view.
+- This would take the view and put it on a card-like interface, as seen in the Memorize game.
+- This modifier should work with any view, not just our `Text("👻")`.
+
+What would such a ViewModifier look like?
+
+```swift
+// Example ViewModifier code
+```
+
+In this example, we will create a custom modifier to "card-ify" any view, adding functionality and visual customization to the view in SwiftUI.
+
+---
+
+## Cardify ViewModifier
+
+### Cardify Modifier Example
+
+```swift
+Text("👻").modifier(Cardify(isFaceUp: true)) // eventually .cardify(isFaceUp: true)
+```
+
+- Here, we apply a custom **Cardify** modifier to a `Text` view.
+
+### Implementing Cardify Modifier
+
+```swift
+struct Cardify: ViewModifier {
+    var isFaceUp: Bool
+    func body(content: Content) -> some View {
+        ZStack {
+            if isFaceUp {
+                RoundedRectangle(cornerRadius: 10).fill(Color.white)
+                RoundedRectangle(cornerRadius: 10).stroke()
+                content
+            } else {
+                RoundedRectangle(cornerRadius: 10)
+            }
+        }
+    }
+}
+```
+
+- **Cardify** is a `ViewModifier` that checks if a card is face-up and then uses a `ZStack` to display either the card content or just a rounded rectangle for the card's back.
+- The `ZStack` allows us to layer the views, such as the `RoundedRectangle` for the card shape and the actual content (like the emoji or text).
+  
+---
+
+## Transitioning to a Custom ViewModifier
+
+### Converting to a Simplified Cardify
+
+```swift
+Text("👻").modifier(Cardify(isFaceUp: true))
+```
+
+- This can be shortened to:
+
+```swift
+Text("👻").cardify(isFaceUp: true)
+```
+
+### Implementing as an Extension
+
+```swift
+extension View {
+    func cardify(isFaceUp: Bool) -> some View {
+        return self.modifier(Cardify(isFaceUp: isFaceUp))
+    }
+}
+```
+
+- By using an extension on `View`, we can easily add the `cardify` function to any view without having to manually call `.modifier()` every time.
+  
+---
+
+## Protocols in SwiftUI
+
+### What is a Protocol Used For?
+
+- One of the most powerful uses of protocols is to facilitate **code sharing**.
+- Implementation can be added to a protocol by creating an extension to it.
+
+### Code Example:
+
+```swift
+extension ProtocolName {
+    // Default implementation for protocol methods
+}
+```
+
+- This is how Views get modifiers like `foregroundColor` and `font`.
+- Functions like `filter` and `firstIndex(where:)` are implemented using protocol extensions.
+- Extensions can also add a **default implementation** for functions or properties in the protocol.
+
+### Key Takeaways:
+
+- Adding extensions to protocols is essential for **protocol-oriented programming** in Swift.
+- This is how Swift enables code reuse and sharing across multiple types and modules.
+
+---
+
+### What is a Protocol Used For?
+
+- Protocols facilitate **code sharing** by allowing extensions to add implementation.
+- Examples:
+  - **filter** was added to Array, String, and Range as an extension to the **Sequence** protocol.
+
+```swift
+filter(_ isIncluded: (Element) -> Bool) -> Array<Element>
+```
+
+- The `filter` function was written once by Apple but works on many types like Array, Range, and more.
+
+
+---
+
+## View in SwiftUI and Protocols
+
+- In SwiftUI, there’s a protocol similar to the following:
+
+```swift
+protocol View {
+    var body: some View { get }
+}
+```
+
+- There’s also an extension that provides various modifiers:
+
+```swift
+extension View {
+    func foregroundColor(_ color: Color) -> some View { /* implementation */ }
+    func font(_ font: Font?) -> some View { /* implementation */ }
+    func blur(radius: CGFloat, opaque: Bool) -> some View { /* implementation */ }
+    // ...and many more...
+}
+```
+
+- The first part **constrains** views (e.g., CardView) to provide the required body.
+- The second part **adds many modifiers** as benefits for conforming to the protocol.
+
+---
+
+## Generics + Protocols
+
+### Identifiable Protocol
+
+```swift
+protocol Identifiable {
+    var id: ID { get }
+}
+```
+
+- Here, `ID` is a **"don't care" type**, meaning any type can be used for `id`.
+- Protocols in Swift can be **generic** and declare associated types.
+
+```swift
+protocol Identifiable {
+    associatedtype ID
+    var id: ID { get }
+}
+```
+
+- This allows any conforming type to provide its own specific type for `id`.
+
+### Example of Generics in Identifiable
+
+- For example, `String` is used as the `ID` type in `MemoryGame.Card`, which conforms to `Identifiable`.
+- Since `String` is **Hashable**, we can look up `id`s in hash tables.
+- This is why **Hashable** is often combined with **Identifiable**.
+
+```swift
+protocol Identifiable {
+    associatedtype ID: Hashable
+    var id: ID { get }
+}
+```
+
+---
+
+### Generics + Protocols
+
+- Consider the `Identifiable` protocol:
+
+```swift
+protocol Identifiable {
+    var id: ID { get }
+}
+```
+
+- The type `ID` is a "don't care" for `Identifiable`.
+- We can enforce that `ID` is `Hashable`:
+
+```swift
+protocol Identifiable {
+    associatedtype ID: Hashable
+    var id: ID { get }
+}
+```
+
+---
+
+### `some` Keyword
+
+- The `some` keyword is used to pass things opaquely in or out of a function or variable.
+- It means that you know the thing conforms to the protocol, but nothing more.
+
+### Example
+
+```swift
+var body: some View {
+    if viewModel.rounded {
+        RoundedRectangle(cornerRadius: 12)
+    } else {
+        Rectangle()
+    }
+}
+```
+
+- All paths through the curly braces `{ }` must return something of the same type.
+
+---
+
+## `some`
+
+### In (i.e., as a parameter to a function)
+
+We saw a generic function in `Shape`:
+
+```swift
+func fill<S>(_ whatToFillWith: S) -> View where S: ShapeStyle
+```
+
+This could be simplified as:
+
+```swift
+func fill(_ whatToFillWith: some ShapeStyle) -> some View
+```
+
+The actual (underlying) type is determined by the caller:
+
+```swift
+Circle().fill(ImagePaint(image: Image(systemName: "globe")))
+```
+
+#### Example Usage:
+
+```swift
+func fillAndStroke(shape: some Shape) -> some View {
+    ZStack {
+        shape.fill(.white)
+        shape.stroke()
+    }
+}
+```
+
+---
+
+## `any`
+
+For simple protocols, you can use the `protocol` keyword like any other type.
+
+Example: `Array<Foo>` for a simple protocol like:
+
+```swift
+protocol Foo {
+    func bar()
+}
+```
+
+If you iterate through an `Array<Foo>`, the only thing you can call is `bar()`.
+
+However, for protocols that involve generics (like `Identifiable`), or are self-referential (like `Equatable`), you can’t do this easily.
+
+Swift’s solution to create a heterogeneous array of such things is to use the keyword `any`.
+
+### Example:
+
+```swift
+let ids = [any Identifiable]()
+```
+
+### To do anything with these ids:
+
+```swift
+func printId(of identifiable: some Identifiable) {
+    print(identifiable.id)
+}
+```
+
+---
+
+## Generics and Protocols
+
+### Help!
+
+Some of you might be feeling overwhelmed.
+
+- "How am I going to design systems using generics/protocols?"
+
+#### Good News:
+
+- SwiftUI does a lot of the work for you.
+- The more you use it, the more you’ll grasp the concepts.
+- Eventually, you’ll master extensions and generics.
+
+You don’t need to be an expert in functional programming to use SwiftUI effectively. Start with the basics, and mastery will come with experience.
+
+
+### Summary
+
+- Protocols are a powerful way to enable code sharing in SwiftUI.
+- `ViewModifier` allows for flexible customization of views.
+- Animations are easy to implement and customize.
+- Custom shapes allow you to create unique UI elements.
+
