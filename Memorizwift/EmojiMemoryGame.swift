@@ -2,49 +2,46 @@
 //  EmojiMemoryGame.swift
 //  Memorizwift
 //
-//  Created by Molly Beach on 9/21/24.
+//  Created by Molly Beach on 10/22/24.
 //
 
 import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
-    
-    // MARK: - Static Properties
-    
-    static let emojis = [
-        "👻", "🐮", "🍓", "🫐", "👀", "🐶", "🐱", "🦊", "🐻", "🦁",
-        "🐸", "🐧", "🐢", "🐙", "🐝", "🐼", "🦄"
+    typealias Card = MemoryGame<String>.Card
+
+    private static let emojis = [
+        "💀", "👻", "🎃", "🕷", "😈", "☠️", "🧙‍♀️", "🕸", "🐈‍⬛", "🧛‍♂️", "🦇",
+        "🎭", "🧟‍♀️", "🕯", "😱", "🧹", "🦉", "🧛‍♀️", "🍬"
     ]
     
-    // MARK: - Private Properties
-    
-    @Published private var model = createMemoryGame()
-    
-    // MARK: - Initializer
-    
-    init() {}
-    
-    // MARK: - Public Properties
-    
-    var cards: [MemoryGame<String>.Card] {
-        model.cards
-    }
-    
-    // MARK: - Private Methods
-    
     private static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame(numberOfPairsOfCards: 12) { pairIndex in
-            emojis.indices.contains(pairIndex) ? emojis[pairIndex] : "⁉️"
+        MemoryGame(numberOfPairsOfCards: 11) { pairIndex in
+            if emojis.indices.contains(pairIndex) {
+                return emojis[pairIndex]
+            } else {
+                return "⁉️"
+            }
         }
     }
-    
-    // MARK: - Intent(s)
-    
+
+    @Published private var model = createMemoryGame()
+
+    var cards: Array<Card> {
+        return model.cards
+    }
+
+    var color: Color {
+        return .orange
+    }
+
+    // MARK: - Intents
+
     func shuffle() {
         model.shuffle()
     }
-    
-    func choose(_ card: MemoryGame<String>.Card) {
+
+    func choose(_ card: Card) {
         model.choose(card)
     }
 }

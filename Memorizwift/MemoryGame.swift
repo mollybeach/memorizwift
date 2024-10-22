@@ -1,30 +1,29 @@
-import Foundation
-
 //
-//  MemoryGame .swift
+//  MemoryGame.swift
 //  Memorizwift
 //
 //  Created by Molly Beach on 9/17/24.
 //
 
+import Foundation
+
 struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
     
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
-        cards = []
-        // addNumberOfPairsCards x2 Cards
+        cards = Array<Card>()
         for pairIndex in 0..<max(2, numberOfPairsOfCards) {
-            let content = cardContentFactory(pairIndex)
+            let content: CardContent = cardContentFactory(pairIndex)
             cards.append(Card(content: content, id: "\(pairIndex+1)a"))
             cards.append(Card(content: content, id: "\(pairIndex+1)b"))
         }
     }
     
     var indexOfTheOneAndOnlyFaceUpCard: Int? {
-        get { cards.indices.filter { index in cards[index].isFaceUp }.only}
+        get { cards.indices.filter { index  in cards[index].isFaceUp }.only }
         set { cards.indices.forEach { cards[$0].isFaceUp = (newValue == $0) } }
     }
-
+    
     mutating func choose(_ card: Card) {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }) {
             if !cards[chosenIndex].isFaceUp && !cards[chosenIndex].isMatched {
@@ -33,7 +32,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                         cards[chosenIndex].isMatched = true
                         cards[potentialMatchIndex].isMatched = true
                     }
-                    indexOfTheOneAndOnlyFaceUpCard = nil
                 } else {
                     indexOfTheOneAndOnlyFaceUpCard = chosenIndex
                 }
@@ -41,21 +39,19 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             }
         }
     }
-
+    
     mutating func shuffle() {
         cards.shuffle()
-        print(cards)
     }
-
-    struct Card : Equatable, Identifiable , CustomDebugStringConvertible{
-
-        var isFaceUp = false
+    
+    struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
+        var isFaceUp = true
         var isMatched = false
         let content: CardContent
-        
         var id: String
+        
         var debugDescription: String {
-            "\(id): \(content) \(isFaceUp ? "up" : "down") \(isMatched ? "matched" : "")"
+            "\(id): \(content)"
         }
     }
 }
@@ -65,4 +61,3 @@ extension Array {
         count == 1 ? first : nil
     }
 }
-

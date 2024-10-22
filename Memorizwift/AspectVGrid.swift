@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct AspectVGrid<Item: Identifiable, ItemView: View>: View {
-    var items: [Item]
+    let items: [Item]
     var aspectRatio: CGFloat = 1
-    var content: (Item) -> ItemView
+    let content: (Item) -> ItemView
     
     init(_ items: [Item], aspectRatio: CGFloat, @ViewBuilder content: @escaping (Item) -> ItemView) {
         self.items = items
@@ -21,7 +21,7 @@ struct AspectVGrid<Item: Identifiable, ItemView: View>: View {
     var body: some View {
         GeometryReader { geometry in
             let gridItemSize = gridItemWidthThatFits(
-                count: items.count, 
+                count: items.count,
                 size: geometry.size,
                 atAspectRatio: aspectRatio
             )
@@ -33,7 +33,8 @@ struct AspectVGrid<Item: Identifiable, ItemView: View>: View {
             }
         }
     }
-    func gridItemWidthThatFits(
+    
+    private func gridItemWidthThatFits(
         count: Int,
         size: CGSize,
         atAspectRatio aspectRatio: CGFloat

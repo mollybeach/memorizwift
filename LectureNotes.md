@@ -1,11 +1,34 @@
 # Lecture Notes
 
 # Table of Contents
-
+- [Lecture 1: Lecture 1](#lecture-1)
+- [Lecture 1: Lecture 2 ](#lecture-2)
 - [Lecture 3: Architecture in Swift (MVVM)](#lecture-3-architecture-in-swift-mvvm)
 - [Lecture 4: Memory Game in Swift](#lecture-4-memory-game-in-swift)
 - [Lecture 5: Enums and Optionals](#lecture-5-enums-and-optionals)
 - [Lecture 6: Layout in SwiftUI](#lecture-6-layout-in-swiftui)
+
+## Lecture 01
+* `some View` allows for any struct to be returned as long as it conforms to the View protocol.
+* `@ViewBuilder` combines multiple views and returns a single View.
+    * Expressions are forbidden.
+```swift
+@ViewBuilder
+var myView: some View {
+    Image(systemName: "globe")
+    Text("some text")
+}
+```
+
+## Lecture 02
+* Trailing closures (last argument is a closure).
+```swift
+ZStack(alignment: .top) {
+  Text("Hello")
+}
+```
+* With a `@State` var, SwiftUI will keep note of changes and redraw the UI.
+* In a `LazyVGrid` views are only created when SwiftUI needs to display them.
 
 # Lecture 3: Architecture in Swift (MVVM)
 
