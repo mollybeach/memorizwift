@@ -35,6 +35,21 @@ ZStack(alignment: .top) {
 
 # Lecture 3: Architecture in Swift (MVVM)
 
+# Lecture 3: Architecture in Swift (MVVM)
+
+## Table of Contents
+1. [MVVM: Model-View-ViewModel](#mvvm-model-view-viewmodel)
+2. [Connecting the Model to the UI](#connecting-the-model-to-the-ui)
+3. [Swift Types](#types-in-swift)
+4. [Struct & Class](#struct--class)
+   - [Common Features](#common-features-of-structs-and-classes)
+   - [Differences](#differences-between-structs-and-classes)
+5. [Generics in Swift](#generics-in-swift)
+6. [Protocols](#protocols)
+7. [Functions as Types](#functions-as-types)
+8. [Closures](#closures)
+9. [Memory Management: ARC vs Garbage Collection](#memory-management-arc-vs-garbage-collection)
+
 ## MVVM: Model-View-ViewModel
 
 - MVVM is a design paradigm used to separate concerns between data (Model), the logic connecting data to the UI (ViewModel), and the UI itself (View).
@@ -247,6 +262,16 @@ let result = operation(4) // result is 16
 
 # Lecture 4: Memory Game in Swift
 
+## Table of Contents
+1. [Model: MemoryGame Struct](#model-memorygame-struct)
+2. [Initialization in Swift](#initialization-in-swift)
+3. [Trailing Closure Syntax](#trailing-closure-syntax)
+4. [Static Variables](#static-variables)
+5. [Creating a Memory Game](#creating-a-memory-game)
+6. [Property Initializers and Self](#property-initializers-and-self)
+7. [Reactive Programming and ObservableObject](#reactive-programming-and-observableobject)
+8. [Using @StateObject in SwiftUI](#using-stateobject-in-swiftui)
+
 ## Model: MemoryGame Struct
 
 The `MemoryGame` struct represents the model of our game.
@@ -374,6 +399,22 @@ struct MemorizwiftApp: App {
 - We use closures for flexibility, static variables for global constants, and reactive programming patterns like `@Published` and `ObservableObject` for state management in SwiftUI.
 
 # Lecture 5: Enums and Optionals
+
+## Table of Contents
+1. [Enum](#enum)
+   - [Associated Data](#associated-data)
+   - [Setting a Value of an Enum](#setting-a-value-of-an-enum)
+   - [Checking an Enum's State](#checking-an-enums-state)
+   - [break in Switch](#break-in-switch)
+   - [default in Switch](#default-in-switch)
+   - [Multiple Lines in Switch Cases](#multiple-lines-in-switch-cases)
+   - [Accessing Associated Data](#accessing-associated-data)
+   - [Methods in Enums](#methods-in-enums)
+   - [Getting All Cases of an Enum](#getting-all-cases-of-an-enum)
+2. [Optionals](#optionals)
+   - [Declaring Optionals](#declaring-optionals)
+   - [Accessing the Value of an Optional](#accessing-the-value-of-an-optional)
+   - [Nil-Coalescing Operator](#nil-coalescing-operator-)
 
 ## Enum
 
@@ -593,6 +634,27 @@ let y = x ?? "default value"
 - In this case, `y` will be assigned "default value" if `x` is nil.
 
 # Lecture 6: Layout in SwiftUI
+
+## Table of Contents
+1. [Basic Layout Principles](#layout-how-is-space-apportioned-to-views)
+2. [HStack and VStack](#layout-hstack-and-vstack)
+   - [Stacks Dividing Space](#stacks-dividing-space)
+   - [Spacer and Divider](#spacer-and-divider)
+   - [layoutPriority](#layoutprioritydouble)
+3. [Alignment in Stacks](#alignment-in-hstack-and-vstack)
+4. [Lazy Stacks](#lazyhstack-and-lazyvstack)
+5. [Grids](#lazyhgrid-and-lazyvgrid)
+6. [ScrollView](#scrollview)
+7. [ViewThatFits](#viewthatfits)
+8. [Advanced Stacks](#advanced-stacks-form-list-outlinegroup-and-disclosuregroup)
+9. [Custom Layout Protocol](#custom-implementations-of-the-layout-protocol)
+10. [ZStack](#zstack)
+11. [Modifiers in SwiftUI](#modifiers-in-swiftui)
+    - [Background and Overlay](#background-modifier)
+    - [Aspect Ratio](#aspectratio-modifier)
+12. [GeometryReader](#geometryreader)
+13. [Safe Area](#safe-area)
+14. [@ViewBuilder](#viewbuilder-notes)
 
 ## Layout: How is Space Apportioned to Views?
 
@@ -838,19 +900,21 @@ func front(of card: Card) -> some View {
 
 ## Today’s Agenda
 
-- **Demo Interlude**:
-  - Separating a View into its own Swift file (demo: `CardView`).
-  - Dealing with constants in your Swift code.
-
-- **Shape**:
-  - Drawing your own custom shape.
-  - Demo: Drawing (but not yet animating) a "pie-shaped" countdown timer on our cards.
-
-- **Animation**:
-  - How does it work?
-
-- **ViewModifier**:
-  - What exactly are functions like `foregroundColor`, `font`, `padding`, etc. doing?
+## Table of Contents
+1. [Shape in SwiftUI](#shape-in-swiftui)
+   - [What is a Shape?](#what-is-a-shape)
+   - [Drawing Shapes](#drawing-shapes)
+   - [Modifying Shapes](#modifying-shapes)
+2. [Creating Custom Shapes](#creating-custom-shapes)
+3. [ViewModifier](#viewmodifier)
+   - [What is a ViewModifier?](#what-is-a-viewmodifier)
+   - [The ViewModifier Protocol](#the-viewmodifier-protocol)
+4. [Animation in SwiftUI](#animation-in-swiftui)
+5. [Cardify ViewModifier Example](#cardify-viewmodifier)
+6. [Protocols in SwiftUI](#protocols-in-swiftui)
+7. [Generics and Protocols](#generics--protocols)
+8. [The `some` Keyword](#some-keyword)
+9. [The `any` Keyword](#any)
 
 ---
 
@@ -1306,18 +1370,18 @@ You don’t need to be an expert in functional programming to use SwiftUI effect
 # Lecture 8: Property Observers and Animation in Swift
 
 ## Table of Contents
-1. Property Observers
-   - .onChange(of:)
-2. Animation
-   - Important Takeaways
-   - Implicit Animation
-   - Animation Curve
-   - Explicit Animation
-   - Transitions
-   - Matched Geometry Effect
-   - .onAppear
-   - Shape and ViewModifier Animation
-3. Demo Examples
+1. [Property Observers](#property-observers)
+   - [.onChange(of:)](#onchangeof)
+2. [Animation](#animation)
+   - [Important Takeaways](#important-takeaways-about-animation)
+   - [Implicit Animation](#implicit-animation)
+   - [Animation Curve](#animation-curve)
+   - [Explicit Animation](#explicit-animation)
+   - [Transitions](#transitions)
+   - [Matched Geometry Effect](#matched-geometry-effect)
+   - [.onAppear](#onappear)
+   - [Shape and ViewModifier Animation](#shape-and-viewmodifier-animation)
+3. [Demo Examples](#demo-examples)
 
 
 ---
