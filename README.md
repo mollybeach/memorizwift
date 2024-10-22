@@ -43,124 +43,195 @@ MIT License
 
 # Overview of File Structure and Flow in Memorizwift
 
-## AspectVGrid.swift (View)
-**Purpose**: This is a custom view component responsible for creating a grid layout where items (such as cards) are displayed. It takes a list of `Item` objects and arranges them in a grid where each cell maintains a specific aspect ratio.
+## MemorizwiftApp.swift (App)
 
-**Key Components**:
-- **Item**: Generic type that must conform to `Identifiable`.
-- **ItemView**: View type that represents how each `Item` is displayed.
-- **GeometryReader**: Used to get the available size and compute the grid’s layout.
-- **gridItemWidthThatFits**: Helper function that calculates the best possible width for each grid item based on the available space and the given aspect ratio.
+**Type:** `@main` App (Entry point)
 
-**Relationship**: This view fits into the UI structure by controlling the grid layout for `CardView` items, creating a dynamic and responsive layout.
+**Purpose:** This is the entry point for the entire app. It initializes the EmojiMemoryGame ViewModel and provides it to the root view EmojiMemoryGameView.
 
----
+**Key Components:**
 
-## Cardify.swift (ViewModifier)
-**Purpose**: This is a `ViewModifier` that modifies the appearance of a card by applying specific styles like rounded corners, borders, and flipping animations.
+- `@StateObject var game:` The ViewModel instance that manages the game's state and behavior.
+- `WindowGroup:` Provides the root EmojiMemoryGameView with the game data to display.
 
-**Key Components**:
-- **isFaceUp**: Boolean property to determine the card's visibility.
-- **RoundedRectangle**: A visual component that represents the card’s border.
-- **ZStack**: Used to overlay content over the card background, showing the front or back of the card depending on `isFaceUp`.
+**Imports:**
 
-**Relationship**: It is applied to `CardView` using the `.cardify()` extension, controlling how cards visually transition between face-up and face-down states.
+- `SwiftUI:` Required to define the app’s UI and manage the lifecycle of views.
 
 ---
 
-## CardView.swift (View)
-**Purpose**: Displays a single card using both content and the `Cardify` modifier. It manages how a card looks, whether it’s face-up or face-down, and its text content.
+## EmojiMemoryGame.swift (ViewModel)
 
-**Key Components**:
-- **Pie**: A custom `Shape` that is used as part of the visual design.
-- **cardify()**: Modifier applied to control the card’s appearance based on whether it's face-up.
-- **Text(card.content)**: The content displayed on the face of the card.
+**Type:** ObservableObject
 
-**Relationship**: This is where individual cards are rendered and styled. It pulls in data from the `MemoryGame` model, then applies the `Cardify` modifier and displays the content.
+**Purpose:** This class is the ViewModel in the MVVM architecture. It manages the game logic and communicates between the UI (Views) and the model (MemoryGame.swift).
 
----
+**Key Components:**
 
-## EmojiMemoryGame.swift (ObservableObject)
-**Purpose**: The ViewModel of the app, connecting the `MemoryGame` model with the views (e.g., `CardView`, `EmojiMemoryGameView`). It holds the game state and provides methods to interact with the game.
+- `@Published private var model:` The MemoryGame model that stores the game's current state.
 
-**Key Components**:
-- **MemoryGame**: This is the model the ViewModel manages.
-- **shuffle()** and **choose()**: Functions that modify the game state.
-- **@Published model**: This means that when the model changes, any views observing the `EmojiMemoryGame` will update automatically.
+**Functions:**
+- `choose(_ card: Card):` Updates the game when a card is chosen.
+- `shuffle():` Shuffles the deck of cards.
+- `cards:` Exposes the current state of the cards to the view.
+- `score:` Exposes the score of the game to the view.
+- `color:` Returns a constant color for use in the view.
 
-**Relationship**: This class mediates between the `MemoryGame` (model) and the SwiftUI views, handling all interactions such as shuffling or choosing cards. It is used in `EmojiMemoryGameView`.
+**Relationship:**
+The ViewModel (EmojiMemoryGame) connects the UI (e.g., EmojiMemoryGameView) with the business logic/model (MemoryGame.swift). Whenever changes occur to the model (cards or game state), the views observing the ViewModel (like EmojiMemoryGameView) are updated.
 
 ---
 
 ## EmojiMemoryGameView.swift (View)
-**Purpose**: The primary user interface for the memory game, showing the grid of cards and interacting with the ViewModel (`EmojiMemoryGame`).
 
-**Key Components**:
-- **AspectVGrid**: The custom grid component used to lay out the cards.
-- **CardView**: Each card is displayed using this component.
-- **viewModel.choose(card)**: Calls the ViewModel to update the game state when a card is tapped.
-- **Shuffle Button**: Allows the user to shuffle the cards.
+**Type:** SwiftUI View
 
-**Relationship**: This is the primary view that users interact with, connecting to the `EmojiMemoryGame` ViewModel. It uses the `AspectVGrid` and `CardView` to render the UI.
+**Purpose:** This is the main view that displays the memory game grid and buttons. It interacts with the EmojiMemoryGame ViewModel to get the game’s data and update the UI when actions occur.
 
----
+**Key Components:**
 
-## MemorizwiftApp.swift (App)
-**Purpose**: This is the entry point for the entire application. It sets up the SwiftUI app and defines the initial scene (window).
+- `@ObservedObject var viewModel:` The ViewModel that the view observes for updates.
+- `AspectVGrid:` A custom grid layout for rendering cards, using the AspectVGrid struct.
 
-**Key Components**:
-- **@StateObject game**: The ViewModel is initialized here and passed to the root view (`EmojiMemoryGameView`).
-- **WindowGroup**: The container for the app’s UI.
+**Interactions:**
+- Tapping a card calls `viewModel.choose(card)` to update the game.
+- The "Shuffle" button shuffles the cards by calling `viewModel.shuffle()`.
 
-**Relationship**: This file initializes the `EmojiMemoryGame` and provides it to the root view (`EmojiMemoryGameView`). It serves as the launching point for the entire SwiftUI app.
+**Relationship:**
+This view observes the EmojiMemoryGame ViewModel for changes and renders the card grid using CardView for individual cards. This view relies on AspectVGrid for layout and CardView to display individual card content.
 
 ---
 
 ## MemoryGame.swift (Model)
-**Purpose**: The core model of the game. It represents the game state, logic for matching cards, and shuffling the deck.
 
-**Key Components**:
-- **Card struct**: Represents an individual card with properties like `isFaceUp` and `isMatched`.
-- **choose()**: Logic for handling what happens when a card is chosen.
-- **shuffle()**: Shuffles the cards in the game.
-- **indexOfTheOneAndOnlyFaceUpCard**: Tracks the currently selected card to check for matches.
+**Type:** Generic Struct
 
-**Relationship**: This is the data model used by the ViewModel (`EmojiMemoryGame`). It encapsulates all the business logic for the game and interacts with the view through the ViewModel.
+**Purpose:** This is the core model of the game, responsible for holding the game state and logic. It manages the cards, matching logic, and scoring.
+
+**Key Components:**
+
+- `cards:` An array of Card structs representing the game cards.
+
+**Functions:**
+- `choose(_ card: Card):` Contains the logic for selecting cards and matching them.
+- `shuffle():` Shuffles the deck of cards.
+
+**Card:** Nested struct representing a single card, containing properties like `isFaceUp, isMatched,` and `content.`
+
+**Relationship:**
+The MemoryGame struct provides the underlying game logic, which is used by the EmojiMemoryGame ViewModel to manage the game's state. CardView displays the Card data from this model, while the ViewModel handles interactions.
+
+---
+
+## AspectVGrid.swift (View)
+
+**Type:** Generic View
+
+**Purpose:** This view creates a dynamic grid layout where items (like cards) are displayed in a grid with a consistent aspect ratio.
+
+**Key Components:**
+
+- `GeometryReader:` Provides the size of the available container, used to calculate the grid layout.
+- `LazyVGrid:` Lays out the items in a vertical scrolling grid with adaptive columns based on the available space.
+- `gridItemWidthThatFits:` Helper function to calculate the width of the grid items.
+
+**Relationship:**
+This view dynamically calculates and displays items in a grid. It works alongside CardView to arrange cards in the game’s layout. EmojiMemoryGameView uses this view to lay out cards.
+
+---
+
+## Cardify.swift (ViewModifier)
+
+**Type:** ViewModifier and Animatable
+
+**Purpose:** This is a custom view modifier that animates and styles a card, flipping it between face-up and face-down. It also handles the 3D rotation for flipping.
+
+**Key Components:**
+
+- `rotation:` Tracks the card's rotation, controlling whether it’s face-up or face-down.
+- `animatableData:` A property for animating the rotation.
+- `ZStack:` Layering different views to show the card’s face and back.
+
+**Animations:**
+- Rotates the card in 3D using `.rotation3DEffect()` to animate between face-up and face-down.
+
+**Relationship:**
+This modifier is applied to CardView using the `.cardify()` extension to animate the flipping of the cards. It enhances the visual appeal by using 3D animations and custom styling for the cards.
+
+---
+
+## CardView.swift (View)
+
+**Type:** SwiftUI View
+
+**Purpose:** This view represents a single card. It renders the card's content and applies the Cardify modifier to handle the visual transition between face-up and face-down states.
+
+**Key Components:**
+
+- `Pie:` A custom Shape used to display part of the card's content (e.g., a pie chart or progress indicator).
+- `cardify():` Applies the Cardify modifier to animate the card flip.
+- `Text(card.content):` Displays the card’s content.
+
+**Relationship:**
+Each card in the memory game is represented by this view. It uses Cardify to handle animations and Pie for additional visual content. EmojiMemoryGameView uses this view inside the AspectVGrid to display each card in the grid.
 
 ---
 
 ## Pie.swift (Shape)
-**Purpose**: A custom `Shape` that is used to display a pie chart or arc as part of the card’s UI.
 
-**Key Components**:
-- **startAngle / endAngle**: Control the portion of the circle that is drawn.
-- **path(in rect: CGRect)**: Defines how the shape is drawn.
+**Type:** Shape
 
-**Relationship**: This shape is used in `CardView` to visually represent something on the face of the card (in this case, a pie chart or arc). It’s purely for the visual design of the card.
+**Purpose:** A custom shape that draws a pie slice or arc. This can be used as part of the card’s design, such as representing progress.
+
+**Key Components:**
+
+- `startAngle` and `endAngle:` Define the arc’s angles.
+- `path(in rect: CGRect):` Builds the path for the shape to draw.
+
+**Relationship:**
+This shape is used inside CardView to enhance the card's visual appearance. It contributes to the graphical display of the card's content.
 
 ---
 
-## Flow Summary:
-1. **MemoryGame.swift** (`Model`): Core game logic and card data are managed here.
-2. **EmojiMemoryGame.swift** (`ViewModel`): Manages the game state and communicates between the model and the UI.
-3. **MemorizwiftApp.swift** (`App`): Entry point, initializes the game and sets up the main window.
-4. **EmojiMemoryGameView.swift** (`View`): Displays the main UI, including a grid of cards and interaction buttons. It relies on `AspectVGrid` for the layout and `CardView` for rendering each card.
-5. **CardView.swift** (`View`): Displays individual cards, applying the `Cardify` modifier for styling.
-6. **Cardify.swift** (`ViewModifier`): Modifies how cards appear and flip.
-7. **AspectVGrid.swift** (`View`): Creates a flexible grid layout to display the cards.
-8. **Pie.swift** (`Shape`): A custom shape used in the card design.
+## FlyingNumber.swift (View)
+
+**Type:** SwiftUI View
+
+**Purpose:** Displays a number that "flies" onto the screen, potentially as part of a score indicator or other dynamic visual element.
+
+**Key Components:**
+
+- Displays a number using `Text(number)` when number != 0.
+
+**Relationship:**
+This view can be integrated into various parts of the UI to display dynamic numerical values, such as scores.
+
+---
+
+## Overall Flow:
+
+1. **MemorizwiftApp.swift** initializes the app and provides the EmojiMemoryGame ViewModel to the root view.
+2. **EmojiMemoryGame.swift** (ViewModel) manages the game’s logic and state using the MemoryGame model and provides data to the UI via EmojiMemoryGameView.
+3. **EmojiMemoryGameView.swift** displays the grid of cards using AspectVGrid and updates the UI based on interactions.
+4. **AspectVGrid.swift** dynamically arranges CardView items in a grid with a fixed aspect ratio.
+5. **CardView.swift** renders individual cards, applying the Cardify modifier for visual transitions and using the Pie shape for additional content.
+6. **Cardify.swift** handles the visual appearance and animations of cards (e.g., flipping).
+7. **MemoryGame.swift** provides the underlying game logic and data structures (cards, matching, and scoring).
+8. **Pie.swift** enhances the visual design of cards with custom shapes.
+9. **FlyingNumber.swift** can be used for displaying dynamic numeric content such as scores.
 
 ---
 
 ## Imports:
-- **SwiftUI**: Used across all views (`EmojiMemoryGameView`, `CardView`, `AspectVGrid`) to build the UI.
-- **Foundation**: Used in the `MemoryGame` for non-UI logic such as shuffling and managing data structures.
-- **CoreGraphics**: Used in `Pie.swift` to work with the low-level drawing API for creating shapes.
+
+- `SwiftUI:` Required for building the app’s user interface, handling views, layouts, animations, and modifiers.
+- `Foundation:` Used for non-UI logic in the MemoryGame (e.g., arrays, shuffling).
+- `CoreGraphics:` Imported in Pie.swift for low-level graphics drawing, needed for creating the custom shape.
 
 ---
 
-This structure adheres to the **MVVM (Model-View-ViewModel)** design pattern common in SwiftUI apps, where:
-- The **model** (`MemoryGame.swift`) manages data and game logic.
-- The **ViewModel** (`EmojiMemoryGame.swift`) manages the state and logic for interacting between the UI and the model.
-- The **Views** (`EmojiMemoryGameView.swift`, `CardView.swift`, `AspectVGrid.swift`) are responsible for presenting the data and capturing user input.
+### This setup follows the MVVM (Model-View-ViewModel) pattern:
 
+1. **Model:** MemoryGame.swift manages the game's state and logic.
+2. **ViewModel:** EmojiMemoryGame.swift acts as the mediator between the model and the views.
+3. **View:** The SwiftUI views (e.g., EmojiMemoryGameView, CardView) render the UI and interact with the ViewModel.

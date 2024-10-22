@@ -896,8 +896,6 @@ func front(of card: Card) -> some View {
 
 # Lecture 7: Drawing, Animating, and View Modifiers in SwiftUI
 
-## Today’s Agenda
-
 ## Table of Contents
 1. [Shape in SwiftUI](#shape-in-swiftui)
    - [What is a Shape?](#what-is-a-shape)
