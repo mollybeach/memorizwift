@@ -8,6 +8,7 @@
 - [Lecture 5: Enums and Optionals](#lecture-5-enums-and-optionals)
 - [Lecture 6: Layout in SwiftUI](#lecture-6-layout-in-swiftui)
 - [Lecture 7: Drawing, Animating, and View Modifiers in SwiftUI](#lecture-7-drawing-animating-and-view-modifiers-in-swiftui)
+- [Lecture 8: Property Observers and Animation in Swift](#lecture-8-property-observers-and-animation-in-swift)
 
 
 # Lecture 1: Introduction to SwiftUI and View Basics
@@ -1301,3 +1302,325 @@ You don’t need to be an expert in functional programming to use SwiftUI effect
 - Custom shapes allow you to create unique UI elements.
 
 
+
+# Lecture 8: Property Observers and Animation in Swift
+
+## Table of Contents
+1. Property Observers
+   - .onChange(of:)
+2. Animation
+   - Important Takeaways
+   - Implicit Animation
+   - Animation Curve
+   - Explicit Animation
+   - Transitions
+   - Matched Geometry Effect
+   - .onAppear
+   - Shape and ViewModifier Animation
+3. Demo Examples
+
+
+---
+
+## 1. Property Observers
+
+### Property Observers
+
+Swift is able to detect when a struct changes. Property Observers allow us to take action when this happens. Essentially, they "watch" a variable and execute code when it changes.
+
+The syntax can look a lot like a computed variable, but it's completely unrelated to that:
+
+```swift
+var isFaceUp: Bool {
+    willSet {
+        if newValue {
+            startUsingBonusTime()
+        } else {
+            stopUsingBonusTime()
+        }
+    }
+}
+```
+
+- `newValue`: This is a special variable representing the value that is going to be set.
+- `didSet`: Another property observer that uses `oldValue`, representing the previous value.
+
+### .onChange(of:) {}
+
+Instead of using a property observer on an `@State` variable, we can use the `.onChange(of:)` view modifier. This detects a change to an `@State` or ViewModel variable:
+
+```swift
+@State private var taps = 0
+
+Text("\(taps) taps")
+    .onChange(of: viewModel.cards) { newCards in
+        taps += 1
+    }
+```
+
+- `newCards`: This represents the value it is going to be set to.
+
+---
+
+## 2. Animation
+
+### Important Takeaways about Animation
+
+- Only **changes** can be animated.
+  - Changes to ViewModifier arguments (including `GeometryEffect` modifiers).
+  - Changes to shapes.
+  - Transitioning a view from "existing" to "not existing" in the UI.
+
+- **ViewModifiers** are the primary "change agents" in the UI.
+  - Changes to a ViewModifier's arguments must happen **after** the view is initially in the UI.
+  - Not all ViewModifier arguments are animatable, but most are.
+  
+- When a view **arrives** or **departs**, the entire thing is animated as a unit.
+
+### Implicit Animation
+
+Implicit animation in Swift allows us to automatically animate views. To enable this, we simply add a `.animation()` modifier to the view:
+
+```swift
+Text("💀")
+    .opacity(card.scary ? 1 : 0)
+    .rotationEffect(Angle.degrees(card.upsideDown ? 180 : 0))
+    .animation(Animation.easeInOut, value: card)
+```
+
+- **Warning**: The `.animation` modifier does not work like a container. It propagates the `.animation` modifier to all the views it contains.
+
+### Animation Curve
+
+The kind of animation curve we use controls how the animation "plays out":
+
+- `.linear`: Consistent rate throughout.
+- `.easeInOut`: Starts slow, speeds up, and then slows down again.
+- `.spring`: Provides a "soft landing" or "bounce" effect at the end of the animation.
+
+### Explicit Animation
+
+Explicit animations allow us to create animation transactions where changes are animated together by executing a block of code:
+
+```swift
+withAnimation(.linear(duration: 2)) {
+    // Do something that will cause view to change
+}
+```
+
+Explicit animations are often wrapped around calls to **ViewModel Intent Functions**, like:
+
+- Entering or exiting editing mode.
+
+**Note**: Explicit animations do not override implicit animations.
+
+---
+
+## Transitions
+
+**Purpose:** Transitions specify how to animate the **arrival/departure** of Views.
+- They work for Views **already on-screen** (containers that are inside CTAOOS - "Containers That Are Already On-Screen").
+- Transitions are composed of pairs of ViewModifiers (before and after changes occur).
+
+Example:
+- A view fades in on appearance but flies out when it disappears.
+
+### Types of Built-in Transitions
+- **`.opacity`:** Uses `.opacity` to fade the `View` in/out.
+- **`.scale`:** Uses `.frame` to expand/shrink the `View`.
+- **`.offset`:** Moves the `View` using an offset.
+- **`.modifier(active:identity:)`:** You provide the two ViewModifiers to use.
+
+---
+
+### Specifying Transitions
+Use `.transition()` to specify which kind of transition to use when a View arrives/departs.
+
+Example:
+```swift
+ZStack {
+  if isFaceUp {
+    RoundedRectangle(cornerRadius: 10)
+      .stroke()
+    Text("💀")
+      .transition(AnyTransition.scale)
+  } else {
+    RoundedRectangle(cornerRadius: 10)
+      .transition(AnyTransition.identity)
+  }
+}
+```
+
+In this example:
+- If `isFaceUp` changes, the front RoundedRectangle fades in and the text grows in.
+- Unlike `.animation()`, `.transition()` only works for the **entire ZStack** (or its content).
+- It **does not** get redistributed to a container’s content Views.
+- **Group** and **ForEach** distribute `.transition()` to their child views.
+
+### Setting Animation Details for a Transition
+To set an animation (curve/duration/etc.) for a transition, use the `.animation` method of `AnyTransition` structs.
+
+Example:
+```swift
+.transition(AnyTransition.opacity.animation(.linear(duration: 20)))
+```
+
+---
+
+## Important Takeaways About Animation
+- Only **changes** can be animated:
+  - **ViewModifier arguments**
+  - **Shapes**
+  - **View transition from existing to non-existing** (or vice versa).
+  
+- **Animation** shows the user changes that have already happened.
+  
+**ViewModifiers** are the primary "change agents" in the UI.
+- Changes to a ViewModifier’s arguments can only happen **after** the `View` is added to the UI.
+- Only changes since a View joined the UI can be animated.
+
+## Matched Geometry Effect
+
+- Sometimes you want a `View` to move from one place on the screen to another, and possibly resize along the way.
+- If the `View` is moving to a new place in its same container, this is no problem (like shuffle).
+- "Moving" like this is just animating the `.position` `ViewModifier` arguments.
+  - `.position` is what `HStack`, `LazyVGrid`, etc., use to position the Views inside them.
+  - This kind of thing happens automatically when you explicitly animate.
+
+- But what if the `View` is "moving" from **one container to a different container**?
+  - This is not really possible.
+  
+- Instead, you need a `View` in the **source** position and a different one in the **destination** position.
+  - Then you must "match" their geometries up as one leaves the UI and the other arrives.
+
+- So, this is similar to `.transition` in that it is animating `Views` coming and going in the UI. 
+  - It's just that it's particular to the case where a **pair** of `Views` arrivals/departures are synced.
+
+## Example - Dealing Cards off of a Deck
+
+- A great example of this would be "dealing cards off of a deck".
+  - The "deck" might well be its own `View` off to the side.
+  - When a card is "dealt" from the deck, it needs to fly from there to the game.
+  - But the deck and game's main `View` are not in the same `LazyVGrid` or anything.
+
+- How do we handle this?
+
+### Marking Views
+
+- We mark both `Views` using this `ViewModifier`:
+```swift
+.matchedGeometryEffect(id: ID, in: Namespace) // ID type is a "don't care": Hashable
+```
+
+- Declare the Namespace as a private var in your `View` like this:
+```swift
+@Namespace private var myNamespace
+```
+
+### Controlling Views
+
+- Now write code so that **only one** of the 2 `Views` is ever included in the UI at the same time.
+  - You can do this with `if-else` in a `ViewBuilder` or maybe via `ForEach`.
+  
+- Now, when one of the pair leaves and the other arrives at the same time, their size and position will be synced up and animated.
+
+- It's possible to match geometries when both `Views` are on screen too.
+
+---
+
+## .onAppear
+
+- Remember that animations only work on `Views` that are in `CTAAOS` (Containers That Are Already On-Screen).
+  
+### Kicking Off Animation on Appear
+
+- How can you kick off an animation as soon as a `View's` Container arrives on-screen?
+  - `View` has a nice function called `.onAppear {}`.
+    - It executes a closure anytime a `View` appears on screen.
+
+- Since, by definition, a `View` is on-screen when its own `.onAppear {}` is happening, it is in a `CTAAOS`, so any animations for it or its children that are appearing can fire.
+
+### Using withAnimation Inside onAppear
+
+- We'll use `.onAppear {}` to kick off a couple of animations in the demo this week, especially ones that only make sense when a certain `View` is visible (e.g., our flying score).
+
+---
+
+## Shape and ViewModifier Animation
+
+- The communication with the animation system happens (both ways) with a single var.
+  - This var is the only thing in the `Animatable` protocol.
+
+### Implementing the Protocol
+
+- Shapes and `ViewModifiers` that want to be animatable must implement this protocol:
+```swift
+var animatableData: Type
+```
+
+- `Type` is a "don't care". Well... it's a "care a little bit".
+  - `Type` has to implement the protocol `VectorArithmetic`.
+    - That's because it has to be able to be broken up into little pieces on an animation curve.
+
+- `Type` is very often a floating point number (`Float`, `Double`, `CGFloat`).
+
+- But there's another struct that implements `VectorArithmetic` called `AnimatablePair`.
+  - `AnimatablePair` combines two `VectorArithmetics` into one `VectorArithmetic`.
+
+- Of course, you can have `AnimatablePairs` of `AnimatablePairs`, so you can animate all you want.
+
+---
+
+## Shape and ViewModifier Animation
+
+The communication with the animation system happens (both ways) with a single variable. 
+This var is the only thing in the `Animatable` protocol.
+
+- Shapes and ViewModifiers that want to be animatable must implement this protocol.
+
+```swift
+var animatableData: Type
+```
+
+- `Type` is a don’t care. Well… it’s a “care a little bit.”
+- `Type` has to implement the protocol `VectorArithmetic` because it has to be broken up into little pieces on an animation curve.
+
+### Example of `Type`
+- Type is often a floating point number (Float, Double, CGFloat).
+- Another struct that implements `VectorArithmetic` is `AnimatablePair`.
+- `AnimatablePair` combines two `VectorArithmetic` into one `VectorArithmetic`.
+
+With `AnimatablePairs`, you can animate as much as you want!
+
+## Animation Communication
+
+Because it’s communicating both ways, this `animatableData` is a **read-write** variable.
+
+- The **setting** of this var is the animation system telling the Shape/VM which "piece" to draw.
+- The **getting** of this var is the animation system getting the start/end points of an animation.
+
+This is often a computed var (but doesn’t have to be).
+
+- We might not want to use the name `animatableData` in our Shape/VM code, instead using more descriptive variable names.
+- The `get/set` often just gets/sets other variables, essentially exposing them to the animation system with a different name.
+
+---
+
+## 3. Demo Examples
+
+### Demo 1: Explicit Animation (Shuffling and Choosing Cards)
+- Demonstrates shuffling and selecting cards with explicit animations.
+
+### Demo 2: Implicit Animation (Celebrating a Match!)
+- An example of celebrating a match with implicit animations.
+
+### Demo 3: Animatable ViewModifier (Flipping Cards)
+- Shows how to create custom view modifiers for flipping cards.
+
+### Demo 4: Suppressing Unwanted Animation
+- How to suppress unwanted animations using `.animation(nil)`.
+
+### Demo 5: onAppear Animation (Score Indications)
+- Demonstrates animating score changes with property observers and tuples.
+
+---
