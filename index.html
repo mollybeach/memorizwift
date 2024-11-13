@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Memorizwift Web</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .card {
+            aspect-ratio: 2/3;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .card.flipped {
+            transform: rotateY(180deg);
+            background: #007AFF;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Memorizwift</h1>
+    <div id="game" class="grid"></div>
+
+    <script>
+        class MemoryGame {
+            constructor() {
+                this.emojis = ["👻", "🐮", "🍓", "🫐", "👀", "🐶", "🐱", "🦊"];
+                this.cards = [...this.emojis, ...this.emojis]
+                    .sort(() => Math.random() - 0.5)
+                    .map((emoji, index) => ({
+                        id: index,
+                        content: emoji,
+                        isFlipped: false,
+                        isMatched: false
+                    }));
+                this.flippedCards = [];
+                this.init();
+            }
+
+            init() {
+                const gameContainer = document.getElementById('game');
+                this.cards.forEach(card => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'card';
+                    cardElement.dataset.id = card.id;
+                    cardElement.onclick = () => this.flipCard(card.id);
+                    gameContainer.appendChild(cardElement);
+                });
+            }
+
+            flipCard(id) {
+                const card = this.cards[id];
+                if (card.isMatched || card.isFlipped || this.flippedCards.length === 2) return;
+
+                card.isFlipped = true;
+                this.flippedCards.push(card);
+                this.updateUI();
+
+                if (this.flippedCards.length === 2) {
+                    this.checkMatch();
+                }
+            }
+
+            checkMatch() {
+                const [card1, card2] = this.flippedCards;
+                if (card1.content === card2.content) {
+                    card1.isMatched = card2.isMatched = true;
+                    this.flippedCards = [];
+                } else {
+                    setTimeout(() => {
+                        card1.isFlipped = card2.isFlipped = false;
+                        this.flippedCards = [];
+                        this.updateUI();
+                    }, 1000);
+                }
+            }
+
+            updateUI() {
+                this.cards.forEach(card => {
+                    const element = document.querySelector(`[data-id="${card.id}"]`);
+                    element.className = `card ${card.isFlipped ? 'flipped' : ''}`;
+                    element.textContent = card.isFlipped ? card.content : '';
+                });
+            }
+        }
+
+        // Start the game
+        new MemoryGame();
+    </script>
+</body>
+</html>
