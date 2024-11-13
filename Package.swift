@@ -8,12 +8,14 @@ let package = Package(
         .executable(name: "MemorizwiftWeb", targets: ["MemorizwiftWeb"])
     ],
     dependencies: [
-        .package(url: "https://github.com/swiftwasm/JavaScriptKit.git", from: "0.18.0")
+        .package(url: "https://github.com/TokamakUI/Tokamak", from: "0.11.0")
     ],
     targets: [
         .executableTarget(
             name: "MemorizwiftWeb",
-            dependencies: ["JavaScriptKit"],
+            dependencies: [
+                .product(name: "TokamakDOM", package: "Tokamak")
+            ],
             path: "Sources/MemorizwiftWeb"
         )
     ]

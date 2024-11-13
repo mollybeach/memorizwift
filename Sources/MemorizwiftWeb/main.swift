@@ -1,16 +1,17 @@
-import TokamakShim
-
-struct ContentView: View {
-    var body: some View {
-        Text("Hello, Memorizwift!")
-    }
-}
+import TokamakDOM
 
 @main
 struct MemorizwiftWebApp: App {
+    @StateObject var game = EmojiMemoryGame()
+    
     var body: some Scene {
-        WindowGroup("Memorizwift") {
-            ContentView()
+        WindowGroup {
+            VStack {
+                Text("Memorizwift Web")
+                    .font(.largeTitle)
+                    .padding()
+                EmojiMemoryGameView(viewModel: game)
+            }
         }
     }
 } 

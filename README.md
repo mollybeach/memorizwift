@@ -2,6 +2,65 @@
 
 Memorizwift is a memory card game app built with SwiftUI, based on Stanford's CS193p iOS Development course. This project demonstrates core iOS development concepts and SwiftUI best practices.
 
+# Project Structure
+```
+Memorizwift/
+├── .git/
+├── Memorizwift/
+│   ├── Assets.xcassets/
+│   │   ├── AccentColor.colorset/
+│   │   │   └── Contents.json
+│   │   ├── AppIcon.appiconset/
+│   │   │   └── Contents.json
+│   │   ├── Image.imageset/
+│   │   │   ├── Contents.json
+│   │   │   └── MVVM.png
+│   │   └── Contents.json
+│   ├── Preview Content/
+│   │   └── Preview Assets.xcassets/
+│   │   │   └── Contents.json
+│   ├── .DS_Store
+│   ├── AspectVGrid.swift
+│   ├── Cardify.swift
+│   ├── CardView.swift
+│   ├── EmojiMemoryGame.swift
+│   ├── EmojiMemoryGameView.swift
+│   ├── FlyingNumber.swift
+│   ├── MemorizwiftApp.swift
+│   ├── MemoryGame.swift
+│   └── Pie.swift
+├── Memorizwift.xcodeproj/
+│   ├── project.xcworkspace/
+│   │   ├── xcshareddata/
+│   │   │   ├── swiftpm/
+│   │   │   │   └── configuration/
+│   │   │   └── IDEWorkspaceChecks.plist
+│   │   ├── xcuserdata/
+│   │   │   └── mollybeach.xcuserdatad/
+│   │   │   │   └── UserInterfaceState.xcuserstate
+│   │   └── contents.xcworkspacedata
+│   ├── xcshareddata/
+│   │   └── xcschemes/
+│   │   │   └── Memorizwift.xcscheme
+│   ├── xcuserdata/
+│   │   └── mollybeach.xcuserdatad/
+│   │   │   ├── xcdebugger/
+│   │   │   │   └── Breakpoints_v2.xcbkptlist
+│   │   │   └── xcschemes/
+│   │   │   │   └── xcschememanagement.plist
+│   └── project.pbxproj
+├── MemorizwiftTests/
+│   └── MemorizwiftTests.swift
+├── MemorizwiftUITests/
+│   ├── MemorizwiftUITests.swift
+│   └── MemorizwiftUITestsLaunchTests.swift
+├── MemorizwiftWeb/
+├── .DS_Store
+├── LectureNotes.md
+└── README.md
+```
+
+
 ## Features
 
 - Memory card game implementation
