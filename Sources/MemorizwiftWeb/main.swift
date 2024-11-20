@@ -14,4 +14,4 @@ struct MemorizwiftWebApp: App {
             }
         }
     }
-} 
+}
