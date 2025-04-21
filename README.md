@@ -1,6 +1,6 @@
 # Memorizwift
 
-Memorizwift is a memory card game app built with SwiftUI, based on Stanford's CS193p iOS Development course. This project demonstrates core iOS development concepts and SwiftUI best practices.
+Memorizwift is a memory card game app built with SwiftUI, based on Stanford's CS193p iOS Development course. This project demonstrates core iOS development concepts and SwiftUI best practices
 # Project Structure
 ```
 Memorizwift/
